@@ -1,0 +1,15 @@
+.container {
+  background-color: #f5f5f5;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  
+}
+
+.textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  resize: vertical;
+} 
