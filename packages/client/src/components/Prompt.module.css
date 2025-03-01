@@ -1,0 +1,24 @@
+.container {
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.textarea {
+  background-color: transparent;
+  border: none;
+  min-height: 200px;
+  resize: none;
+  width: 100%;
+  color: var(--font-color);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+}
+
+.textarea:focus {
+  outline: none;
+}
+
+.button {
+  width: 100%;
+  background-color: #9a4d34;
+}

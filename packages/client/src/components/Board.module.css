@@ -1,0 +1,39 @@
+.board {
+  position: absolute;
+  margin: 3rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: 600px;
+}
+
+.background {
+  display: flex;
+  flex-direction: column;
+  background-color: #af6540;
+  margin: 2rem;
+  padding: 0rem;
+  height: 100%;
+}
+
+.prompt {
+  position: relative;
+  bottom: auto;
+  left: auto;
+}
+
+.story {
+  border-left: 1px solid #ddd;
+  padding-left: 1rem;
+}
+
+.knob {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
