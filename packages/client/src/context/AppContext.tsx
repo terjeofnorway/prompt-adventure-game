@@ -1,10 +1,11 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
+import { Storyline } from '@shared/types/Story';
 
 interface AppContextType {
   prompt: string;
-  story: string;
+  storyline: Storyline;
   setPrompt: (prompt: string) => void;
-  setStory: (story: string) => void;
+  setStoryline: (storyline: Storyline) => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
 }
@@ -13,7 +14,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [prompt, setPrompt] = useState('');
-  const [story, setStory] = useState('Your story will appear here...');
+  const [storyline, setStoryline] = useState<Storyline>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -21,8 +22,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       value={{
         prompt,
         setPrompt,
-        story,
-        setStory,
+        storyline,
+        setStoryline,
         isLoading,
         setIsLoading,
       }}

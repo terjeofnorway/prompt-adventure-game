@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import { postPromptHandler } from './handlers';
+import { getFullStoryHandler, postPromptHandler } from './handlers';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -12,12 +12,16 @@ app.use(express.raw({ type: 'application/json' }));
 app.use(express.json());
 
 // Routes
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (_req: Request, res: Response) => {
   res.json({ message: 'Welcome to the API' });
 });
 
 app.post('/api/prompt', async (req: Request, res: Response) => {
   await postPromptHandler(req, res);
+});
+
+app.get('/api/story', async (req: Request, res: Response) => {
+  await getFullStoryHandler(req, res);
 });
 
 // Start server

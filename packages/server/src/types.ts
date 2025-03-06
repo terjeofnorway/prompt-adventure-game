@@ -1,7 +1,6 @@
 import { OpenAI } from 'openai';
 
-
-export type Message =
+export type AIMessage =
   | OpenAI.Chat.Completions.ChatCompletionAssistantMessageParam
-  | OpenAI.Chat.Completions.ChatCompletionSystemMessageParam
-  | { role: 'user'; content: string };
+  | OpenAI.Chat.Completions.ChatCompletionUserMessageParam
+  | OpenAI.Chat.Completions.ChatCompletionDeveloperMessageParam;

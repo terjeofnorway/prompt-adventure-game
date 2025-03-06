@@ -1,12 +1,15 @@
 import { postImagePromptToLLM, postMessageToLLM } from './llm';
 import { getStoryline } from './memory/storage';
-import { Message } from './types';
+import { AIMessage } from './types';
 
 type ProgressStoryParams = {
-  message: Message;
+  message: AIMessage;
 };
 
 export const progressStory = async ({ message }: ProgressStoryParams) => {
+  console.log('--------------------------------');
+  console.log('progressStory');
+  console.log('--------------------------------');
   const storyline = await getStoryline();
 
   const includeCharacter = Math.random() < 0.5;
@@ -20,15 +23,27 @@ export const progressStory = async ({ message }: ProgressStoryParams) => {
 
   const parsedResponseContent = JSON.parse(response.content);
 
-  const { story, character } = parsedResponseContent;
+  const { story, characterDescription } = parsedResponseContent;
 
-  const characterImage = await postImagePromptToLLM({ message });
+  console.log('Story:');
+  console.log(story);
+  console.log('--------------------------------');
+  console.log('Character Description:');
+  console.log(characterDescription);
+  console.log('--------------------------------');
+
+  const characterImage = await postImagePromptToLLM(characterDescription);
   console.log('characterImage', characterImage);
 
-  const cleanedMessage: Message = {
+  const cleanedMessage: AIMessage = {
     role: 'assistant',
     content: story,
   };
 
   return cleanedMessage;
+};
+
+export const getFullStory = async () => {
+  const storyline = await getStoryline();
+  return storyline;
 };

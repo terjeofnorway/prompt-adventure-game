@@ -1,20 +1,16 @@
-import { Message } from './types';
+import { AIMessage } from './types';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
 
-import { getSystemPrompt } from './memory/storage';
+import { getDeveloperPrompt } from './memory/storage';
 import { llmResponseSchema } from './schema';
 
 dotenv.config();
 
 type ProgressStoryParams = {
-  messages: Message[];
+  messages: AIMessage[];
   includeCharacter?: boolean;
-};
-
-type imagePromptParams = {
-  message: Message;
 };
 
 export const connectToLLM = async () => {
@@ -27,26 +23,26 @@ export const connectToLLM = async () => {
 
 const responseFormat = zodResponseFormat(llmResponseSchema, 'assistant_response');
 
-const imageSystemPromptPrefix =
+const imagedeveloperPromptPrefix =
   'The theme is pirate game. Create a medium resolution pixel-art image inspired by 90s adventure games such as Monkey Island, Kings Quest or Space Quest. Use a restricted 64-color palette: ';
 
 const newCharacterPrompt =
   'Introduce a new character to the story. Create a short description of the character and their appearance, including clothing and accessories.';
 
-const createCharacterPrompt = (): Message => {
+const createCharacterPrompt = (): AIMessage => {
   console.log('Creating character prompt');
   return {
-    role: 'system',
+    role: 'developer',
     content: newCharacterPrompt,
   };
 };
 
 export const postMessageToLLM = async ({ messages, includeCharacter = false }: ProgressStoryParams) => {
-  const systemPrompt = await getSystemPrompt();
+  const developerPrompt = await getDeveloperPrompt();
 
   const openai = await connectToLLM();
 
-  const llmMessageThread = [systemPrompt, ...messages];
+  const llmMessageThread = [developerPrompt, ...messages];
 
   if (includeCharacter) {
     llmMessageThread.push(createCharacterPrompt());
@@ -61,9 +57,9 @@ export const postMessageToLLM = async ({ messages, includeCharacter = false }: P
   return response.choices[0].message;
 };
 
-export const postImagePromptToLLM = async ({ message }: imagePromptParams) => {
-  const systemPrompt = await getSystemPrompt();
-  const fullPrompt = `${systemPrompt}: ${imageSystemPromptPrefix} ${message.content}`;
+export const postImagePromptToLLM = async (characterDescription: string) => {
+  const developerPrompt = await getDeveloperPrompt();
+  const fullPrompt = `${developerPrompt}: ${imagedeveloperPromptPrefix} ${characterDescription}`;
 
   console.log('fullPrompt', fullPrompt);
 

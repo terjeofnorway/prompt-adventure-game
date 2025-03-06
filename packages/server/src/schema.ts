@@ -15,7 +15,7 @@ export const llmResponseSchema = z.object({
     .describe(
       'This is the text that the assistant has created that drives the story forward. Aim for max 150 words, but less is also acceptable.'
     ),
-  character: z
+  characterDescription: z
     .string()
     .describe(
       'If previous system prompt asks for character description: create a short description of the character and their appearance, including clothing and accessories.'

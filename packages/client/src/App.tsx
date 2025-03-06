@@ -1,30 +1,29 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import styles from './App.module.css';
 import { Header } from './components/Header';
 import { Board } from './components/Board';
 import { NotFound } from './components/NotFound';
-import { AppProvider } from './context/AppContext';
 import dummyImage from './assets/dummy-image.png';
+import { useGame } from './components/hooks/useGame';
 import { useEffect } from 'react';
-import { saveMessage } from './gameengine/db';
 
 function App() {
+  const { getFullStory, story } = useGame();
+
   useEffect(() => {
-    saveMessage('hello world');
+    getFullStory();
   }, []);
 
+  console.log(story);
+
   return (
-    <BrowserRouter>
-      <AppProvider>
-        <div className={styles.container} style={{ backgroundImage: `url(${dummyImage})` }}>
-          <Header />
-          <Routes>
-            <Route path="/" element={<Board />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
-      </AppProvider>
-    </BrowserRouter>
+    <div className={styles.container} style={{ backgroundImage: `url(${dummyImage})` }}>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Board />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
   );
 }
 
