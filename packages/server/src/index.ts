@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import { getFullStoryHandler, postPromptHandler } from './handlers';
+import { getStorylineHandler, postPromptHandler } from './handlers';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -20,8 +20,8 @@ app.post('/api/prompt', async (req: Request, res: Response) => {
   await postPromptHandler(req, res);
 });
 
-app.get('/api/story', async (req: Request, res: Response) => {
-  await getFullStoryHandler(req, res);
+app.get('/api/storyline', async (req: Request, res: Response) => {
+  await getStorylineHandler(req, res);
 });
 
 // Start server

@@ -6,7 +6,7 @@
 .content {
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 600px;
   height: 600px;
 }
 
@@ -17,6 +17,7 @@
   margin: 2rem;
   padding: 0rem;
   height: 100%;
+  overflow: hidden;
 }
 
 .prompt {

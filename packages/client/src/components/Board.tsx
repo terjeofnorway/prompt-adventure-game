@@ -10,8 +10,8 @@ export const Board = () => {
     <div className={styles.board}>
       <div className={styles.content} ref={canvasRef}>
         <div className={styles.background}>
-          <Story className={styles.story} />
-          <Prompt className={styles.prompt} />
+          <Story />
+          <Prompt />
         </div>
       </div>
       <Frame />

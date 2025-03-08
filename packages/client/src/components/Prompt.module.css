@@ -1,13 +1,19 @@
-.container {
+.prompt {
+  display: flex;
+  flex-direction: column;
   padding: 1rem;
-  border-radius: 0.5rem;
+  height: 200px;
+  background-color: var(--dark-brown);
+  border: 5px solid var(--light-brown);
+  margin: 0 1rem 1rem 1rem;
 }
 
 .textarea {
+  flex-grow: 1;
   background-color: transparent;
   border: none;
-  min-height: 200px;
   resize: none;
+  height: fill-content;
   width: 100%;
   color: var(--font-color);
   font-family: var(--font-family);
@@ -21,4 +27,7 @@
 .button {
   width: 100%;
   background-color: #9a4d34;
+  color: var(--font-color);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
 }

@@ -1,11 +1,7 @@
 import styles from './Prompt.module.css';
 import { useAppContext } from '../context/AppContext';
 
-interface PromptProps {
-  className?: string;
-}
-
-export const Prompt = ({ className }: PromptProps) => {
+export const Prompt = () => {
   const { prompt, setPrompt, setIsLoading } = useAppContext();
 
   const handleSubmit = async () => {
@@ -15,7 +11,7 @@ export const Prompt = ({ className }: PromptProps) => {
   };
 
   return (
-    <div className={`${styles.container} ${className}`}>
+    <div className={`${styles.prompt}`}>
       <textarea
         className={styles.textarea}
         placeholder="Enter your prompt here..."
@@ -23,7 +19,7 @@ export const Prompt = ({ className }: PromptProps) => {
         onChange={(e) => setPrompt(e.target.value)}
       />
       <button className={styles.button} onClick={handleSubmit}>
-        Submit
+        Send
       </button>
     </div>
   );

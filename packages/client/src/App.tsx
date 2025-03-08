@@ -8,13 +8,11 @@ import { useGame } from './components/hooks/useGame';
 import { useEffect } from 'react';
 
 function App() {
-  const { getFullStory, story } = useGame();
+  const { getStoryline } = useGame();
 
   useEffect(() => {
-    getFullStory();
+    getStoryline();
   }, []);
-
-  console.log(story);
 
   return (
     <div className={styles.container} style={{ backgroundImage: `url(${dummyImage})` }}>

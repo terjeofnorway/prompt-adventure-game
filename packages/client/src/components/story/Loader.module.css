@@ -1,0 +1,27 @@
+.loader {
+  width: 20px;
+  height: 20px;
+  padding: 0 1rem;
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: rotate 6s steps(18) infinite;
+}
+
+.icon path {
+  fill: var(--font-color);
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
