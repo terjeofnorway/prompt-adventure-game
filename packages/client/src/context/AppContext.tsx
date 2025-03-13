@@ -1,13 +1,14 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { Storyline } from '@shared/types/Story';
+import { Storyline, StorySegment } from '@shared/types/Story';
 
 interface AppContextType {
   prompt: string;
   storyline: Storyline;
   setPrompt: (prompt: string) => void;
   setStoryline: (storyline: Storyline) => void;
-  isLoading: boolean;
-  setIsLoading: (loading: boolean) => void;
+  addToStoryline: (message: StorySegment) => void;
+  isWaiting: boolean;
+  setIsWaiting: (loading: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -15,7 +16,11 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [prompt, setPrompt] = useState('');
   const [storyline, setStoryline] = useState<Storyline>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false);
+
+  const addToStoryline = (message: StorySegment) => {
+    setStoryline((prev) => [...prev, message]);
+  };
 
   return (
     <AppContext.Provider
@@ -24,8 +29,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setPrompt,
         storyline,
         setStoryline,
-        isLoading,
-        setIsLoading,
+        addToStoryline,
+        isWaiting,
+        setIsWaiting,
       }}
     >
       {children}

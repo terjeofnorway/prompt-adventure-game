@@ -1,4 +1,5 @@
-import { postImagePromptToLLM, postMessageToLLM } from './llm';
+import { gameInstructionPrompt, newCharacterPrompt, startPrompt } from './defaults';
+import { postCharacterPromptToLLM, postMessageToLLM } from './llm';
 import { getStoryline } from './memory/storage';
 import { AIMessage } from './types';
 
@@ -6,41 +7,73 @@ type ProgressStoryParams = {
   message: AIMessage;
 };
 
-export const progressStory = async ({ message }: ProgressStoryParams) => {
-  console.log('--------------------------------');
-  console.log('progressStory');
-  console.log('--------------------------------');
+type StoryContent = {
+  story: string;
+  characterDescription: string;
+};
+
+const normalizeAssistantStoryContent = (message: AIMessage) => {
+  if (typeof message.content !== 'string') {
+    return message;
+  }
+
+  const { story, characterDescription } = JSON.parse(message.content) as StoryContent;
+
+  console.log(`Story: ${characterDescription}`);
+
+  return {
+    ...message,
+    content: story,
+  };
+};
+
+export const startStory = async (messages: AIMessage[]) => {
+  const response = await postMessageToLLM({ messages });
+  const normalizedResponse = normalizeAssistantStoryContent(response);
+  return normalizedResponse;
+};
+
+export const buildGameInstructionMessage = async () => {
+  return {
+    role: 'developer',
+    content: gameInstructionPrompt,
+  } as AIMessage;
+};
+
+export const buildStartMessage = (): AIMessage => {
+  return {
+    role: 'developer',
+    content: startPrompt,
+  };
+};
+
+export const buildNewCharacter = async (): Promise<AIMessage> => {
+  const characterResponse = await postCharacterPromptToLLM(newCharacterPrompt);
+  return {
+    role: 'developer',
+    content: `If the users prompt is accepted and the story moves on, introduce a new character in the next story segment: ${characterResponse}`,
+  };
+};
+
+export const progressStory = async ({ message }: ProgressStoryParams): Promise<AIMessage> => {
   const storyline = await getStoryline();
 
-  const includeCharacter = Math.random() < 0.5;
+  const shouldIntroduceCharacter = Math.random() < 0.3;
+  const newCharacterMessage = shouldIntroduceCharacter ? await buildNewCharacter() : null;
 
-  const messages = [...storyline, message];
-  const response = await postMessageToLLM({ messages, includeCharacter });
+  if (newCharacterMessage !== null) {
+    console.log(`Introduced new character: ${newCharacterMessage.content}`);
+  }
+
+  const messages = [...storyline, newCharacterMessage, message].filter((m) => m !== null);
+  const response = await postMessageToLLM({ messages });
 
   if (response.content === null) {
     return response;
   }
 
-  const parsedResponseContent = JSON.parse(response.content);
-
-  const { story, characterDescription } = parsedResponseContent;
-
-  console.log('Story:');
-  console.log(story);
-  console.log('--------------------------------');
-  console.log('Character Description:');
-  console.log(characterDescription);
-  console.log('--------------------------------');
-
-  const characterImage = await postImagePromptToLLM(characterDescription);
-  console.log('characterImage', characterImage);
-
-  const cleanedMessage: AIMessage = {
-    role: 'assistant',
-    content: story,
-  };
-
-  return cleanedMessage;
+  const normalizedResponse = normalizeAssistantStoryContent(response);
+  return normalizedResponse;
 };
 
 export const getFullStory = async () => {

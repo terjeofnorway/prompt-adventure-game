@@ -10,14 +10,10 @@ export const assistantResponseSchema = z.object({
 });
 
 export const llmResponseSchema = z.object({
-  story: z
-    .string()
-    .describe(
-      'This is the text that the assistant has created that drives the story forward. Aim for max 150 words, but less is also acceptable.'
-    ),
+  story: z.string().describe('This is the actual story segment that is presented as text to the user.'),
   characterDescription: z
     .string()
     .describe(
-      'If previous system prompt asks for character description: create a short description of the character and their appearance, including clothing and accessories.'
+      'This is a description of the character that is included in the story segment, but leave blank if no character was included or mentioned. If a character was included or mentioned, describe the characters appearance, personality, and any other relevant visual details.'
     ),
 });

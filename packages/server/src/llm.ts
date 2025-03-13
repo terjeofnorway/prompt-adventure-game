@@ -1,16 +1,16 @@
 import { AIMessage } from './types';
-import { zodResponseFormat } from 'openai/helpers/zod';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
+import { zodResponseFormat } from 'openai/helpers/zod';
 
-import { getDeveloperPrompt } from './memory/storage';
+import { imagegameInstructionPromptPrefix } from './defaults';
+import { buildGameInstructionMessage } from './gameEngine';
 import { llmResponseSchema } from './schema';
 
 dotenv.config();
 
 type ProgressStoryParams = {
   messages: AIMessage[];
-  includeCharacter?: boolean;
 };
 
 export const connectToLLM = async () => {
@@ -21,53 +21,46 @@ export const connectToLLM = async () => {
   return openai;
 };
 
-const responseFormat = zodResponseFormat(llmResponseSchema, 'assistant_response');
-
-const imagedeveloperPromptPrefix =
-  'The theme is pirate game. Create a medium resolution pixel-art image inspired by 90s adventure games such as Monkey Island, Kings Quest or Space Quest. Use a restricted 64-color palette: ';
-
-const newCharacterPrompt =
-  'Introduce a new character to the story. Create a short description of the character and their appearance, including clothing and accessories.';
-
-const createCharacterPrompt = (): AIMessage => {
-  console.log('Creating character prompt');
-  return {
-    role: 'developer',
-    content: newCharacterPrompt,
-  };
-};
-
-export const postMessageToLLM = async ({ messages, includeCharacter = false }: ProgressStoryParams) => {
-  const developerPrompt = await getDeveloperPrompt();
+export const postMessageToLLM = async ({ messages }: ProgressStoryParams) => {
+  const gameInstructionPrompt = await buildGameInstructionMessage();
 
   const openai = await connectToLLM();
 
-  const llmMessageThread = [developerPrompt, ...messages];
-
-  if (includeCharacter) {
-    llmMessageThread.push(createCharacterPrompt());
-  }
+  const llmMessageThread = [gameInstructionPrompt, ...messages];
 
   const response = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: llmMessageThread,
-    response_format: responseFormat,
+    response_format: zodResponseFormat(llmResponseSchema, 'llmResponse'),
+  });
+
+  return response.choices[0].message;
+};
+
+export const postCharacterPromptToLLM = async (characterPrompt: string) => {
+  const openai = await connectToLLM();
+
+  const message: AIMessage = {
+    role: 'developer',
+    content: characterPrompt,
+  };
+
+  const response = await openai.chat.completions.create({
+    model: 'gpt-4o-mini',
+    messages: [message],
   });
 
   return response.choices[0].message;
 };
 
 export const postImagePromptToLLM = async (characterDescription: string) => {
-  const developerPrompt = await getDeveloperPrompt();
-  const fullPrompt = `${developerPrompt}: ${imagedeveloperPromptPrefix} ${characterDescription}`;
-
-  console.log('fullPrompt', fullPrompt);
+  const imagePrompt = `${imagegameInstructionPromptPrefix} ${characterDescription}`;
 
   const openai = await connectToLLM();
 
   const response = await openai.images.generate({
     model: 'dall-e-3',
-    prompt: fullPrompt,
+    prompt: imagePrompt,
     n: 1,
     size: '1024x1024',
   });

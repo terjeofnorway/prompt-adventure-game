@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import { getStorylineHandler, postPromptHandler } from './handlers';
+import { startStoryHandler } from './handlers/startStoryHandler';
+import { promptHandler } from './handlers/promptHandler';
+import { getStorylineHandler } from './handlers/getStorylineHandler';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -11,13 +13,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.raw({ type: 'application/json' }));
 app.use(express.json());
 
-// Routes
-app.get('/', (_req: Request, res: Response) => {
-  res.json({ message: 'Welcome to the API' });
+app.get('/api/start', async (req: Request, res: Response) => {
+  await startStoryHandler(req, res);
 });
 
 app.post('/api/prompt', async (req: Request, res: Response) => {
-  await postPromptHandler(req, res);
+  await promptHandler(req, res);
 });
 
 app.get('/api/storyline', async (req: Request, res: Response) => {

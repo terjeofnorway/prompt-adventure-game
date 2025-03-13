@@ -1,17 +1,28 @@
+import { AIMessage } from '../../../../server/src/types';
 import { useAppContext } from '../../context/AppContext';
+import { StorySegment } from '../story/StorySegment';
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 export const useGame = () => {
-  const { prompt, setPrompt, storyline, setStoryline, isLoading, setIsLoading } = useAppContext();
+  const { storyline, setStoryline, addToStoryline, isWaiting, setIsWaiting } = useAppContext();
 
   const sendPrompt = async (prompt: string) => {
+    setIsWaiting(true);
     const response = await fetch(`${VITE_API_URL}/api/prompt`, {
       method: 'POST',
-      body: JSON.stringify({ prompt }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ content: prompt }),
     });
 
-    return response;
+    const data = await response.json();
+
+    if (response.ok) {
+      addToStoryline(data);
+      setIsWaiting(false);
+    }
   };
 
   const getStoryline = async () => {
@@ -23,5 +34,5 @@ export const useGame = () => {
     }
   };
 
-  return { sendPrompt, getStoryline, storyline };
+  return { sendPrompt, getStoryline, storyline, isWaiting };
 };
