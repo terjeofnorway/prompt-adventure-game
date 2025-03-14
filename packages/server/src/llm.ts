@@ -65,5 +65,5 @@ export const postImagePromptToLLM = async (characterDescription: string) => {
     size: '1024x1024',
   });
 
-  console.log('response', response);
+  return response;
 };

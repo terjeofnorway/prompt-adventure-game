@@ -20,7 +20,7 @@ export const startPrompt =
   "The theme is pirate adventure set in 1700's. Start by describing the scene and the character that the user is going to play.";
 
 export const imagegameInstructionPromptPrefix =
-  "The theme is pirate adventure set in 1700's. Create a medium resolution pixel-art image inspired by 90s adventure games such as Monkey Island, Kings Quest or Space Quest. Use a restricted 64-color palette: ";
+  "The theme is pirate adventure set in 1700's. Create a medium resolution pixel-art image inspired by 80s adventure games such as Monkey Island, Kings Quest or Space Quest. Use a restricted 64-color palette: ";
 
 export const newCharacterPrompt =
   'Introduce a new character to the story that the user should interact with. Create a short description of the character and their appearance, including clothing and accessories.';
