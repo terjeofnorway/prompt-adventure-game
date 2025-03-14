@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { userPromptSchema } from '../schema';
-import { AIMessage } from '../types';
+import { RawUserMessage } from '../types';
 import { progressStory } from '../gameEngine';
 import { saveMessage } from '../memory/storage';
 
@@ -15,12 +15,12 @@ export const promptHandler = async (req: Request, res: Response) => {
     return;
   }
 
-  const userMessage: AIMessage = {
+  const userMessage: RawUserMessage = {
     role: 'user',
     content: parsedPrompt.data.content,
   };
 
-  const assistantMessage = await progressStory({ message: userMessage });
+  const assistantMessage = await progressStory(userMessage);
 
   const augmentedUserMessage = await saveMessage(userMessage);
   const augmentedAssistantMessage = await saveMessage(assistantMessage);

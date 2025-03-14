@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { gameInstructionPrompt, imagegameInstructionPromptPrefix, newCharacterPrompt, startPrompt } from './defaults';
 import { postCharacterPromptToLLM, postImagePromptToLLM, postMessageToLLM } from './llm';
 import { getStoryline } from './memory/storage';
-import { AIMessage } from './types';
+import { AIMessage, RawUserMessage } from './types';
 import { StorySegment } from '@shared/types/Story';
 import fs from 'fs';
 import path from 'path';
@@ -13,16 +13,12 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-type ProgressStoryParams = {
-  message: AIMessage;
-};
-
 type StoryContent = {
   story: string;
   characterDescription: string;
 };
 
-const normalizeAssistantStoryContent = (message: AIMessage) => {
+const destructAIMessageResponse = (message: AIMessage): { message: StorySegment; characterDescription: string } => {
   if (typeof message.content !== 'string') {
     throw new Error('Invalid message content');
   }
@@ -32,6 +28,7 @@ const normalizeAssistantStoryContent = (message: AIMessage) => {
   return {
     message: {
       ...message,
+      id: uuidv4(),
       content: story,
     },
     characterDescription,
@@ -63,13 +60,17 @@ const createAndStoreImage = (characterDescription: string) => {
   return uuid;
 };
 
-const buildNewCharacter = async (): Promise<AIMessage> => {
+const randomlyIntroduceNewCharacter = async (): Promise<StorySegment | null> => {
+  if (Math.random() > 0.3) {
+    return null;
+  }
   const characterResponse = await postCharacterPromptToLLM(newCharacterPrompt);
   const characterDescription = characterResponse.content;
   if (typeof characterDescription !== 'string') {
     throw new Error('Invalid character description');
   }
   return {
+    id: uuidv4(),
     role: 'developer',
     content: `If the users prompt is accepted and the story moves on, introduce a new character in the next story segment: ${characterDescription}`,
   };
@@ -79,50 +80,58 @@ export const buildGameInstructionMessage = async () => {
   return {
     role: 'developer',
     content: gameInstructionPrompt,
-  } as AIMessage;
+  } as StorySegment;
 };
 
-export const buildStartMessage = (): AIMessage => {
+export const buildStartMessage = (): StorySegment => {
   return {
+    id: uuidv4(),
     role: 'developer',
     content: startPrompt,
   };
-  ('');
 };
 
-export const startStory = async (messages: AIMessage[]): Promise<StorySegment> => {
+export const startStory = async (messages: StorySegment[]): Promise<StorySegment> => {
   const response = await postMessageToLLM({ messages });
-  const { message, characterDescription } = normalizeAssistantStoryContent(response);
-  if (message.content === null) {
+  const { message, characterDescription } = destructAIMessageResponse(response);
+
+  if (!message.content || typeof message.content !== 'string') {
     throw new Error('Invalid response from LLM');
   }
-  const imageId = createAndStoreImage(characterDescription);
-  const { content, role } = message;
-  return { role, content, id: uuidv4(), meta: { imageId, characterDescription } };
+
+  const imageId = characterDescription && createAndStoreImage(characterDescription);
+  return { ...message, meta: { imageId, characterDescription } };
 };
 
-export const progressStory = async ({ message }: ProgressStoryParams): Promise<StorySegment> => {
+export const progressStory = async (rawUserMessage: RawUserMessage): Promise<StorySegment> => {
   const storyline = await getStoryline();
+  const newMessage: StorySegment = {
+    ...rawUserMessage,
+    id: null,
+  };
 
-  const shouldIntroduceCharacter = Math.random() < 0.3;
-  const newCharacterMessage = shouldIntroduceCharacter ? await buildNewCharacter() : null;
+  const characterIntroductionMessage = await randomlyIntroduceNewCharacter();
 
-  if (newCharacterMessage !== null) {
-    console.log(`Introduced new character: ${newCharacterMessage.content}`);
+  if (characterIntroductionMessage !== null) {
+    console.log(`Introducing new character: ${characterIntroductionMessage.content}`);
   }
 
-  const messages = [...storyline, newCharacterMessage, message].filter((m) => m !== null);
-  const response = await postMessageToLLM({ messages });
+  const allMessages = [...storyline, characterIntroductionMessage, newMessage].filter((m) => m !== null);
+  const response = await postMessageToLLM({ messages: allMessages });
 
-  const { message: normalizedMessage, characterDescription } = normalizeAssistantStoryContent(response);
+  const { message, characterDescription } = destructAIMessageResponse(response);
 
-  if (normalizedMessage.content === null) {
+  if (message.content === null || typeof message.content !== 'string') {
     throw new Error('Invalid response from LLM');
   }
 
+  // Note that this is not an async function. We want to deliver
+  // the message to the client as soon as possible, and then
+  // store the image in the background. The client will poll on the image
+  // id and load it when it's ready.
   const imageId = createAndStoreImage(characterDescription);
-  const { content, role } = normalizedMessage;
-  return { role, content, id: uuidv4(), meta: { imageId, characterDescription } };
+
+  return { ...message, meta: { imageId, characterDescription } };
 };
 
 export const getFullStory = async () => {

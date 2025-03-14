@@ -17,10 +17,10 @@ Maintain the tone of a classic adventure game, using playful, witty, and sometim
 Only include other characters apart from the users character when prompted by a developer prompt.`;
 
 export const startPrompt =
-  "The theme is pirate adventure set in 1700's. Start by describing the scene and the character that the user is going to play.";
+  "The theme is pirate adventure set in 1700's. Start by describing the scene and the character that the user is going to play, then continue with the task that the user is going to solve.";
 
 export const imagegameInstructionPromptPrefix =
-  "The theme is pirate adventure set in 1700's. Create a medium resolution pixel-art image inspired by 80s adventure games such as Monkey Island, Kings Quest or Space Quest. Use a restricted 64-color palette: ";
+  "The theme is pirate styled adventure game. Create a medium resolution pixel-art image inspired by 80's adventure games such as Monkey Island, Kings Quest or Space Quest.";
 
 export const newCharacterPrompt =
   'Introduce a new character to the story that the user should interact with. Create a short description of the character and their appearance, including clothing and accessories.';

@@ -6,11 +6,11 @@ export const startStoryHandler = async (_req: Request, res: Response) => {
   const gameInstructionMessage = await buildGameInstructionMessage();
   const startMessage = buildStartMessage();
 
-  const assistantMessage = await startStory([gameInstructionMessage, startMessage]);
+  const assistantResponse = await startStory([gameInstructionMessage, startMessage]);
 
   await saveGameInstructionMessage(gameInstructionMessage);
   await saveMessage(startMessage);
-  await saveMessage(assistantMessage);
+  await saveMessage(assistantResponse);
 
   const storyline = await getFullStory();
 
