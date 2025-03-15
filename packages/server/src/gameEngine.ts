@@ -7,11 +7,8 @@ import { StorySegment } from '@shared/types/Story';
 import fs from 'fs';
 import path from 'path';
 import axios from 'axios';
-import { fileURLToPath } from 'url';
-
-// Create __dirname equivalent for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { logger } from './logger';
+import { __dirname } from './helpers';
 
 type StoryContent = {
   story: string;
@@ -67,6 +64,7 @@ const randomlyIntroduceNewCharacter = async (): Promise<StorySegment | null> => 
   const characterResponse = await postCharacterPromptToLLM(newCharacterPrompt);
   const characterDescription = characterResponse.content;
   if (typeof characterDescription !== 'string') {
+    logger.error('randomlyIntroduceNewCharacter: Invalid character description');
     throw new Error('Invalid character description');
   }
   return {
@@ -113,7 +111,7 @@ export const progressStory = async (rawUserMessage: RawUserMessage): Promise<Sto
   const characterIntroductionMessage = await randomlyIntroduceNewCharacter();
 
   if (characterIntroductionMessage !== null) {
-    console.log(`Introducing new character: ${characterIntroductionMessage.content}`);
+    logger.info(`Introducing new character: ${characterIntroductionMessage.content}`);
   }
 
   const allMessages = [...storyline, characterIntroductionMessage, newMessage].filter((m) => m !== null);
@@ -129,7 +127,7 @@ export const progressStory = async (rawUserMessage: RawUserMessage): Promise<Sto
   // the message to the client as soon as possible, and then
   // store the image in the background. The client will poll on the image
   // id and load it when it's ready.
-  const imageId = createAndStoreImage(characterDescription);
+  const imageId = characterDescription && createAndStoreImage(characterDescription);
 
   return { ...message, meta: { imageId, characterDescription } };
 };

@@ -3,6 +3,7 @@ import cors from 'cors';
 import { startStoryHandler } from './handlers/startStoryHandler';
 import { promptHandler } from './handlers/promptHandler';
 import { getStorylineHandler } from './handlers/getStorylineHandler';
+import { getImageHandler } from './handlers/getImageHandler';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -23,6 +24,10 @@ app.post('/api/prompt', async (req: Request, res: Response) => {
 
 app.get('/api/storyline', async (req: Request, res: Response) => {
   await getStorylineHandler(req, res);
+});
+
+app.get('/api/images/:id', async (req: Request, res: Response) => {
+  await getImageHandler(req, res);
 });
 
 // Start server
