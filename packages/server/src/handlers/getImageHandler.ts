@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import { __dirname } from '../helpers';
 import { logger } from '../logger';
 
-export const getImageHandler = (req: Request, res: Response) => {
+export const getImageHandler = async (req: Request, res: Response) => {
   const { id } = req.params;
   const imagePath = `${path.join(__dirname, '../', 'assets')}/${id}.png`;
 

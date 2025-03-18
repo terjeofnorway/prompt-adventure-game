@@ -14,6 +14,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.raw({ type: 'application/json' }));
 app.use(express.json());
 
+app.get('/api/isAlive', (_req: Request, res: Response) => {
+  res.status(200).json({ message: 'Server is alive' });
+});
+
 app.get('/api/start', async (req: Request, res: Response) => {
   await startStoryHandler(req, res);
 });
