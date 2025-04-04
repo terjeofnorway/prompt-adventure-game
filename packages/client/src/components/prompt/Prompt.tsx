@@ -1,6 +1,6 @@
 import styles from './Prompt.module.css';
-import { useAppContext } from '../context/AppContext';
-import { useGame } from './hooks/useGame';
+import { useAppContext } from '../../context/AppContext';
+import { useGame } from '../hooks/useGame';
 
 export const Prompt = () => {
   const { prompt, setPrompt } = useAppContext();

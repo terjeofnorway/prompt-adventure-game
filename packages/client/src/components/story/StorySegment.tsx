@@ -1,7 +1,6 @@
 import { StorySegment as StorySegmentType } from '@shared/types/Story';
 
 import styles from './StorySegment.module.css';
-import { Image } from './Image';
 
 type StorySegmentProps = {
   storySegment: StorySegmentType;
@@ -15,8 +14,7 @@ export const StorySegment = ({ storySegment }: StorySegmentProps) => {
   const styleVariaion = role === 'user' ? styles.user : styles.agent;
 
   return (
-    <div className={`${styles.storySegment} ${styleVariaion}`}>
-      {imageId && <Image imageId={imageId} imageDescription={characterDescription} />}
+    <div id={storySegment.id || undefined} className={`${styles.storySegment} ${styleVariaion}`}>
       {content}
     </div>
   );

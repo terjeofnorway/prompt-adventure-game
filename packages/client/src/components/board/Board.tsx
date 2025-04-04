@@ -1,7 +1,7 @@
-import { Prompt } from './Prompt';
-import { Story } from './story/Story';
+import { Prompt } from '../prompt/Prompt';
+import { Story } from '../story/Story';
 import styles from './Board.module.css';
-import { Frame } from './frame/Frame';
+import { Frame } from '../frame/Frame';
 import { useRef } from 'react';
 
 export const Board = () => {

@@ -1,0 +1,15 @@
+.illustration {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 300px;
+
+  top: 50px;
+  left: 650px;
+}
+
+.image {
+  margin: 1rem;
+}
