@@ -14,6 +14,6 @@ export const llmResponseSchema = z.object({
   characterDescription: z
     .string()
     .describe(
-      'This is a description of the character that is included in the story segment, but leave blank if no character was included or mentioned. If a character was included or mentioned, describe the characters appearance, personality, and any other relevant visual details.'
+      'This is a description of the character or object that is included in the story segment. Give a short summary of the relevant details, how the character looks like to help the user immerse themselves into the story visually.'
     ),
 });

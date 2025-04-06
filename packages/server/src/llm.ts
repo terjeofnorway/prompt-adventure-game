@@ -47,22 +47,6 @@ export const postMessageToLLM = async ({ messages }: ProgressStoryParams) => {
   return response.choices[0].message;
 };
 
-export const postCharacterPromptToLLM = async (characterPrompt: string) => {
-  const openai = await connectToLLM();
-
-  const message: AIMessage = {
-    role: 'developer',
-    content: characterPrompt,
-  };
-
-  const response = await openai.chat.completions.create({
-    model: 'gpt-4o-mini',
-    messages: [message],
-  });
-
-  return response.choices[0].message;
-};
-
 export const postImagePromptToLLM = async (characterDescription: string) => {
   const imagePrompt = `${imagegameInstructionPromptPrefix} ${characterDescription}`;
 

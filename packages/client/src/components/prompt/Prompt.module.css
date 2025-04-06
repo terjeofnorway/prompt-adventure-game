@@ -3,7 +3,7 @@
   flex-direction: column;
   padding: 1rem;
   height: 200px;
-  background-color: var(--dark-brown);
+  background-color: var(--prompt-background);
   border: 5px solid var(--light-brown);
   margin: 0 1rem 1rem 1rem;
 }
@@ -16,7 +16,7 @@
   height: fill-content;
   width: 100%;
   color: var(--font-color);
-  font-family: var(--font-family);
+  font-family: var(--prompt-font);
   font-size: var(--font-size);
 }
 

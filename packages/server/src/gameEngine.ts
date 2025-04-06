@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-import { gameInstructionPrompt, imagegameInstructionPromptPrefix, newCharacterPrompt, startPrompt } from './defaults';
-import { postCharacterPromptToLLM, postImagePromptToLLM, postMessageToLLM } from './llm';
+import { gameInstructionPrompt, imagegameInstructionPromptPrefix, startPrompt } from './defaults';
+import { postImagePromptToLLM, postMessageToLLM } from './llm';
 import { getStoryline } from './memory/storage';
 import { AIMessage, RawUserMessage } from './types';
 import { StorySegment } from '@shared/types/Story';
@@ -9,6 +9,14 @@ import path from 'path';
 import axios from 'axios';
 import { logger } from './logger';
 import { __dirname } from './helpers';
+
+type GameState = {
+  waitingImages: string[];
+};
+
+export const gameState: GameState = {
+  waitingImages: [],
+};
 
 type StoryContent = {
   story: string;
@@ -35,6 +43,7 @@ const destructAIMessageResponse = (message: AIMessage): { message: StorySegment;
 const createAndStoreImage = (characterDescription: string) => {
   const imagePrompt = `${imagegameInstructionPromptPrefix}: ${characterDescription}`;
   const uuid = uuidv4();
+  gameState.waitingImages.push(uuid);
   postImagePromptToLLM(imagePrompt).then((response) => {
     const { data } = response;
     if (!Array.isArray(data)) {
@@ -52,26 +61,13 @@ const createAndStoreImage = (characterDescription: string) => {
       responseType: 'stream',
     }).then((imageResponse) => {
       imageResponse.data.pipe(writer);
+      writer.on('finish', () => {
+        logger.info(`Image saved to ${imagePath}`);
+        gameState.waitingImages = gameState.waitingImages.filter((id) => id !== uuid);
+      });
     });
   });
   return uuid;
-};
-
-const randomlyIntroduceNewCharacter = async (): Promise<StorySegment | null> => {
-  if (Math.random() > 0.3) {
-    return null;
-  }
-  const characterResponse = await postCharacterPromptToLLM(newCharacterPrompt);
-  const characterDescription = characterResponse.content;
-  if (typeof characterDescription !== 'string') {
-    logger.error('randomlyIntroduceNewCharacter: Invalid character description');
-    throw new Error('Invalid character description');
-  }
-  return {
-    id: uuidv4(),
-    role: 'developer',
-    content: `If the users prompt is accepted and the story moves on, introduce a new character in the next story segment: ${characterDescription}`,
-  };
 };
 
 export const buildGameInstructionMessage = async () => {
@@ -105,16 +101,10 @@ export const progressStory = async (rawUserMessage: RawUserMessage): Promise<Sto
   const storyline = await getStoryline();
   const newMessage: StorySegment = {
     ...rawUserMessage,
-    id: null,
+    id: uuidv4(),
   };
 
-  const characterIntroductionMessage = await randomlyIntroduceNewCharacter();
-
-  if (characterIntroductionMessage !== null) {
-    logger.info(`Introducing new character: ${characterIntroductionMessage.content}`);
-  }
-
-  const allMessages = [...storyline, characterIntroductionMessage, newMessage].filter((m) => m !== null);
+  const allMessages = [...storyline, newMessage].filter((m) => m !== null);
   const response = await postMessageToLLM({ messages: allMessages });
 
   const { message, characterDescription } = destructAIMessageResponse(response);

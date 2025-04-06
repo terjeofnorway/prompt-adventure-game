@@ -21,6 +21,3 @@ export const startPrompt =
 
 export const imagegameInstructionPromptPrefix =
   "The theme is pirate styled adventure game. Create a medium resolution pixel-art image inspired by 80's adventure games such as Monkey Island, Kings Quest or Space Quest.";
-
-export const newCharacterPrompt =
-  'Introduce a new character to the story that the user should interact with. Create a short description of the character and their appearance, including clothing and accessories.';

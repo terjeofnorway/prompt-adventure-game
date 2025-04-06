@@ -8,4 +8,6 @@ export type StorySegment = {
   };
 } & AIMessage;
 
+export type UserPrompt = Omit<StorySegment, 'id' | 'meta'>;
+
 export type Storyline = StorySegment[];

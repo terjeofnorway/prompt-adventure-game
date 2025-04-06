@@ -9,6 +9,8 @@ export const Prompt = () => {
   const handleSubmit = async () => {
     window.dispatchEvent(new Event('USER_PROMPT'));
     sendPrompt(prompt);
+    setPrompt('');
+    
   };
 
   return (
