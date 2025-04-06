@@ -6,7 +6,7 @@ interface AppContextType {
   storyline: Storyline;
   setPrompt: (prompt: string) => void;
   setStoryline: (storyline: Storyline) => void;
-  addToStoryline: (message: StorySegment) => void;
+  addToStoryline: (message: StorySegment[]) => void;
   isWaiting: boolean;
   setIsWaiting: (loading: boolean) => void;
 }
@@ -18,8 +18,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [storyline, setStoryline] = useState<Storyline>([]);
   const [isWaiting, setIsWaiting] = useState(false);
 
-  const addToStoryline = (message: StorySegment) => {
-    setStoryline((prev) => [...prev, message]);
+  const addToStoryline = (newSegments: StorySegment[]) => {
+    setStoryline((prev) => [...prev, ...newSegments]);
   };
 
   return (

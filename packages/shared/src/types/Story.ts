@@ -1,7 +1,7 @@
 import { AIMessage } from '../../../server/src/types';
 
 export type StorySegment = {
-  id: string | null;
+  id: string;
   meta?: {
     imageId?: string;
     characterDescription?: string;

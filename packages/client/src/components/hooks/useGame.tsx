@@ -1,6 +1,5 @@
-import { AIMessage } from '../../../../server/src/types';
+import { StorySegment } from '@shared/types/Story';
 import { useAppContext } from '../../context/AppContext';
-import { StorySegment } from '../story/StorySegment';
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
@@ -17,7 +16,7 @@ export const useGame = () => {
       body: JSON.stringify({ content: prompt }),
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as StorySegment[];
 
     if (response.ok) {
       addToStoryline(data);
