@@ -15,7 +15,7 @@ type ProgressStoryParams = {
   messages: StorySegment[];
 };
 
-const connectToLLM = async () => {
+export const connectToLLM = async () => {
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
@@ -23,7 +23,7 @@ const connectToLLM = async () => {
   return openai;
 };
 
-const sanitizeMessage = (message: StorySegment): AIMessage => {
+export const sanitizeMessage = (message: StorySegment): AIMessage => {
   const sanitizedMessage: AIMessage = {
     role: message.role,
     content: message.content,
