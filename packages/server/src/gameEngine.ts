@@ -1,14 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
-import { gameInstructionPrompt, imagegameInstructionPromptPrefix, startPrompt } from './defaults';
-import { postImagePromptToLLM, postMessageToLLM } from './llm';
-import { getStoryline } from './memory/storage';
+import { gameInstructionPrompt, startPrompt, summaryStartPrompt } from './defaults';
+import { postMessageToLLM } from './llm';
+import { getStoryline, getSummary, updateMessage } from './memory/storage';
 import { AIMessage, RawUserMessage } from './types';
 import { StorySegment } from '@shared/types/Story';
-import fs from 'fs';
-import path from 'path';
-import axios from 'axios';
-import { logger } from './logger';
-import { __dirname } from './helpers';
+import { __dirname, stripStorySegmentForLLM } from './helpers';
+import { createAndStoreImage } from './images';
 
 type GameState = {
   waitingImages: string[];
@@ -40,41 +37,22 @@ const destructAIMessageResponse = (message: AIMessage): { message: StorySegment;
   };
 };
 
-const createAndStoreImage = (characterDescription: string) => {
-  const imagePrompt = `${imagegameInstructionPromptPrefix}: ${characterDescription}`;
-  const uuid = uuidv4();
-  gameState.waitingImages.push(uuid);
-  postImagePromptToLLM(imagePrompt).then((response) => {
-    const { data } = response;
-    if (!Array.isArray(data)) {
-      throw new Error('Invalid image data');
-    }
-    const imageData = data[0];
-    const { url } = imageData;
-
-    // Fetch the image and store it locally
-    const imagePath = path.join(__dirname, '../', 'assets', `${uuid}.png`);
-    const writer = fs.createWriteStream(imagePath);
-    axios({
-      url,
-      method: 'GET',
-      responseType: 'stream',
-    }).then((imageResponse) => {
-      imageResponse.data.pipe(writer);
-      writer.on('finish', () => {
-        logger.info(`Image saved to ${imagePath}`);
-        gameState.waitingImages = gameState.waitingImages.filter((id) => id !== uuid);
-      });
-    });
-  });
-  return uuid;
-};
-
 export const buildGameInstructionMessage = async () => {
   return {
     role: 'developer',
     content: gameInstructionPrompt,
   } as StorySegment;
+};
+
+export const buildSummaryInstructionMessage = async (currentSummary: string): Promise<AIMessage> => {
+  const summaryPrompt = currentSummary
+    ? `${summaryStartPrompt}. The following has already happened and should be included in the summary: ${currentSummary}`
+    : `${summaryStartPrompt}`;
+
+  return {
+    role: 'developer',
+    content: summaryPrompt,
+  };
 };
 
 export const buildStartMessage = (): StorySegment => {
@@ -120,6 +98,53 @@ export const progressStory = async (rawUserMessage: RawUserMessage): Promise<Sto
   const imageId = characterDescription && createAndStoreImage(characterDescription);
 
   return { ...message, meta: { imageId, characterDescription } };
+};
+
+export const summmarizeStory = async (): Promise<string> => {
+  console.log('Summarizing story');
+  const storyline = await getStoryline();
+  const currentSummary = await getSummary();
+
+  const instructionPrompt = !currentSummary
+    ? summaryStartPrompt
+    : `${summaryStartPrompt}. The following has already happened and should be included in the summary: ${currentSummary}`;
+
+  const storySegmentsAsString = storyline.reduce((acc, segment) => {
+    if (segment.role === 'developer' || segment.meta?.isSummarized) {
+      return acc;
+    }
+
+    const storyteller = segment.role === 'user' ? 'User' : 'Assistant';
+
+    return `${acc}\n${storyteller}: ${segment.content}`;
+  }, '');
+
+  const llmMessage: StorySegment = {
+    id: uuidv4(),
+    role: 'developer',
+    content: `${instructionPrompt}${storySegmentsAsString}`,
+  };
+
+  const response = await postMessageToLLM({ messages: [llmMessage] });
+
+  const { message } = destructAIMessageResponse(response);
+
+  console.log('Summary message:', message);
+
+  // Replace forEach with Promise.all + map to properly await all async operations
+  /* await Promise.all(
+    unsummarizedMessages.map(async (message) => {
+      message.meta = { ...message.meta, isSummarized: true };
+      await updateMessage(message);
+    })
+  );
+
+  console.log('got here');
+
+  return message.content as string; 
+  */
+
+  return message.content as string;
 };
 
 export const getFullStory = async () => {

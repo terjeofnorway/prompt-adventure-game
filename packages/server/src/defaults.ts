@@ -21,3 +21,6 @@ export const startPrompt =
 
 export const imagegameInstructionPromptPrefix =
   "The theme is pirate styled adventure game. Create a medium resolution pixel-art image inspired by 80's adventure games such as Monkey Island, Kings Quest or Space Quest.";
+
+export const summaryStartPrompt =
+  "Summarize the story so far in a few sentences. Include the main character's name, their current location, and any important events or decisions that have taken place. The summary should be concise and engaging, capturing the essence of the adventure and the users choices so far without going into excessive detail.";

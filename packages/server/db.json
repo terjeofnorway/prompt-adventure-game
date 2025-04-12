@@ -112,7 +112,10 @@
     {
       "id": "b141f7b1-ed6e-43f6-8151-3545966fad56",
       "role": "user",
-      "content": "Let the octopus lead the way and start swimming after him into the cave."
+      "content": "Let the octopus lead the way and start swimming after him into the cave.",
+      "meta": {
+        "isSummarized": true
+      }
     },
     {
       "id": "e71940ad-b720-4af2-a7cb-b1caec164536",
@@ -122,7 +125,8 @@
       "annotations": [],
       "meta": {
         "imageId": "4dc6f84e-2f9f-408e-9fa7-bb26536ecac2",
-        "characterDescription": "The octopus is a vibrant creature with a kaleidoscope of colors adorning its skin, shimmering in the underwater light. Its large, expressive eyes shine with intelligence and mischief, each of its eight tentacles gracefully moving in fluid, elegant motions. It wears a crown of tiny shells, adding an air of regality to its persona, and around it swim various brightly colored fish, all eager to witness the unfolding adventure."
+        "characterDescription": "The octopus is a vibrant creature with a kaleidoscope of colors adorning its skin, shimmering in the underwater light. Its large, expressive eyes shine with intelligence and mischief, each of its eight tentacles gracefully moving in fluid, elegant motions. It wears a crown of tiny shells, adding an air of regality to its persona, and around it swim various brightly colored fish, all eager to witness the unfolding adventure.",
+        "isSummarized": true
       }
     },
     {
@@ -154,13 +158,17 @@
       "annotations": [],
       "meta": {
         "imageId": "357a82ac-c67a-4e2d-9408-d8e4a4e5b0f7",
-        "characterDescription": "The octopus, styled with vibrant colors of blues and greens, possesses eight wiggly arms adorned with amusing circus-like charms. It has eyes that are both inquisitive and mischievous, hinting at its cleverness and a touch of magic. The underwater cave, filled with glimmering treasures and curious sea life, creates an enchanting backdrop, making the scene both whimsical and idyllic."
+        "characterDescription": "The octopus, styled with vibrant colors of blues and greens, possesses eight wiggly arms adorned with amusing circus-like charms. It has eyes that are both inquisitive and mischievous, hinting at its cleverness and a touch of magic. The underwater cave, filled with glimmering treasures and curious sea life, creates an enchanting backdrop, making the scene both whimsical and idyllic.",
+        "isSummarized": true
       }
     },
     {
       "id": "78b38727-2d47-44fe-8802-d51744864d31",
       "role": "user",
-      "content": "Tell the riddle to the crew and ask for ideas for the answer."
+      "content": "Tell the riddle to the crew and ask for ideas for the answer.",
+      "meta": {
+        "isSummarized": true
+      }
     },
     {
       "id": "79063665-bd68-4b1d-9dd4-adb5d7667acb",
@@ -170,7 +178,28 @@
       "annotations": [],
       "meta": {
         "imageId": "38502de6-6635-4f9a-afd8-e755a938d522",
-        "characterDescription": "A sturdy, grizzled old pirate with an eye patch: Captain Ruggedbeard stands proudly at the helm. His beard is long and wild, filled with bits of seaweed and bits of old treasure, emphasizing his affinity for the ocean. He has a deep, booming voice—a true storyteller at heart."
+        "characterDescription": "A sturdy, grizzled old pirate with an eye patch: Captain Ruggedbeard stands proudly at the helm. His beard is long and wild, filled with bits of seaweed and bits of old treasure, emphasizing his affinity for the ocean. He has a deep, booming voice—a true storyteller at heart.",
+        "isSummarized": true
+      }
+    },
+    {
+      "id": "0f79e9ba-14f8-4630-86cf-9043652b5e47",
+      "role": "user",
+      "content": "Share treasure with crew equally",
+      "meta": {
+        "isSummarized": true
+      }
+    },
+    {
+      "id": "fbec091e-739c-4fea-abac-47ae9c418746",
+      "role": "assistant",
+      "content": "You calmly gather the crew together, your heart swelling with pride as you proclaim, \"A treasure found is a treasure meant to be shared!\" The pirates cheer enthusiastically, their spirits soaring as they gather around the chest. With a flourish, you begin distributing the glimmering gold coins and sparkling jewels equally among your comrades, ensuring that every handsomely bearded sailor gets their fair share. \n\n   As the treasure spills forth, hearty laughter and cheers fill the air, echoing over the waves of the Caribbean. The crew can hardly contain their glee as they each receive their spoils, but you notice a twinkle of admiration in their eyes, not just for the gold, but for your leadership and generosity. Old Captain Ruggedbeard leans over your shoulder with a grin, declaring, “Aye! We’ve got ourselves a true captain among us!”  \n\n   With everyone now equally rich, the crew starts dreaming of their next grand adventure. Some suggest setting sail for mysterious islands, while others (including One-Eyed Pete) simply want to spend a fortnight celebrating their newfound wealth by sipping grog and dancing with the local mermaids! \n\n   The sea is full of promise, and the horizon stretches endlessly before you, both shimmering with adventure yet to come. \n\n   What do you do next? Do you make plans for the next voyage, or perhaps decide to chart a course for the nearest port to enjoy the fruits of your labor?  \n",
+      "refusal": null,
+      "annotations": [],
+      "meta": {
+        "imageId": "0a1d2994-3ae2-454f-b076-96fd9c1b5c53",
+        "characterDescription": "You stand before your jubilant crew atop The Salty Scallywag, the sun glistening off the treasure chest overflowing with coins and jewels. The crew is a rugged bunch, clad in tattered clothes, laughter etched on their weathered faces as they eagerly gather around. One-Eyed Pete, the local jokester, is already eyeing a gold doubloon, while Captain Ruggedbeard, with his grand beard and authoritative swagger, leans on the ship's wheel, smiling broadly at your leadership.",
+        "isSummarized": true
       }
     }
   ],

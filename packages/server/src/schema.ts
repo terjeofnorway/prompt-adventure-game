@@ -14,6 +14,6 @@ export const llmResponseSchema = z.object({
   characterDescription: z
     .string()
     .describe(
-      'This is a description of the character or object that is included in the story segment. Give a short summary of the relevant details, how the character looks like to help the user immerse themselves into the story visually.'
+      'This is a visual description of the situation being told in the story segment. Give a short summary of the relevant details, how any characters looks or how the surrounding looks. This is to help the user immerse themselves into the story visually.'
     ),
 });

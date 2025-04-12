@@ -7,6 +7,7 @@ import { imagegameInstructionPromptPrefix } from './defaults';
 import { buildGameInstructionMessage } from './gameEngine';
 import { llmResponseSchema } from './schema';
 import { StorySegment } from '@shared/types/Story';
+import { logger } from './logger';
 
 dotenv.config();
 
@@ -38,11 +39,15 @@ export const postMessageToLLM = async ({ messages }: ProgressStoryParams) => {
 
   const llmMessageThread = [gameInstructionPrompt, ...messages].map(sanitizeMessage).filter((item) => !!item);
 
+  const startTime = Date.now();
+  logger.info(`Sending LLM message request`);
   const response = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: llmMessageThread,
     response_format: zodResponseFormat(llmResponseSchema, 'llmResponse'),
   });
+  const responseTime = Date.now() - startTime;
+  logger.info(`LLM response time: ${responseTime}ms`);
 
   return response.choices[0].message;
 };

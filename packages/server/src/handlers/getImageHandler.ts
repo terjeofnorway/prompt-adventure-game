@@ -16,8 +16,6 @@ export const getImageHandler = async (req: Request, res: Response) => {
 
   const imagePath = `${path.join(__dirname, '../', 'assets')}/${id}.png`;
 
-  logger.info(`Fetching image from path: ${imagePath}`);
-
   fs.stat(imagePath, (err, stats) => {
     if (err) {
       res.status(404).send('Image not found');
