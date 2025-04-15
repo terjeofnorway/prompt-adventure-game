@@ -4,7 +4,7 @@ import { useAppContext } from '../../context/AppContext';
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 export const useGame = () => {
-  const { gameTheme, storyline, setStoryline, addToStoryline, isWaiting, setIsWaiting } = useAppContext();
+  const { gameTheme, setGameTheme, storyline, setStoryline, addToStoryline, isWaiting, setIsWaiting } = useAppContext();
 
   const sendPrompt = async (prompt: string) => {
     setIsWaiting(true);
@@ -33,5 +33,11 @@ export const useGame = () => {
     }
   };
 
-  return { sendPrompt, getStoryline, storyline, isWaiting, gameTheme };
+  const loadGame = async () => {};
+
+  const startGame = async () => {
+    setGameTheme('pirate');
+  };
+
+  return { sendPrompt, getStoryline, storyline, isWaiting, gameTheme, loadGame, startGame };
 };

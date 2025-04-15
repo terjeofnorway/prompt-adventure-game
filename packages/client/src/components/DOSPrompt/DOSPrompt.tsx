@@ -2,6 +2,9 @@ import { useState } from 'react';
 import styles from './DOSPrompt.module.css';
 import { PromptLine } from './PromptLine';
 import { v4 as uuidv4 } from 'uuid';
+import { useGame } from '../hooks/useGame';
+import { availableThemes } from '@shared/themes';
+import { Theme } from '@shared/types/Story';
 
 type SingleDOSPrompt = {
   type: 'user' | 'computer';
@@ -11,18 +14,24 @@ type SingleDOSPrompt = {
 
 /* A very dirty prompt simulator. Please don't look. */
 export const DOSPrompt = () => {
+  const { startGame } = useGame();
+
   const [promptHistory, setPromptHistory] = useState<SingleDOSPrompt[]>([]);
 
   const handlePrompt = (prompt: string) => {
     if (prompt.startsWith('game start')) {
-      const validThemes = ['pirate', 'space', 'fantasy'];
-      const theme = prompt.split(' ').pop()?.replace(/"/g, '');
+      const theme = prompt.split(' ').pop()?.replace(/"/g, '') as Theme;
 
-      console.log('Theme:', theme);
-      return theme && validThemes.includes(theme)
+      const isThemevalid = availableThemes.includes(theme || '');
+      if (isThemevalid) {
+        setTimeout(startGame, 1000);
+      }
+
+      return isThemevalid
         ? `Starting the game with ${theme} theme.`
-        : 'Invalid theme. Please choose from: pirate, space, fantasy.';
+        : 'Invalid theme. Please choose from: ' + availableThemes.join(', ') + '.';
     }
+
     if (prompt.startsWith('help')) {
       return 'Some available commands: game start "theme", help, exit.';
     }
@@ -45,7 +54,7 @@ export const DOSPrompt = () => {
       return "Exiting. I'm done. Just... I'm out of here.";
     }
     if (prompt.startsWith('ls')) {
-      return 'Listing all files and folders - especially that one folder marked "studies"... ;)';
+      return 'Listing your local files and folders - especially that one folder marked "studies"... ;)';
     }
     if (prompt.startsWith('cd')) {
       const directory = prompt.split(' ').pop();
@@ -55,7 +64,7 @@ export const DOSPrompt = () => {
       const directory = prompt.split(' ').pop();
       return `Creating directory '${directory}' failed. Authenticate your Github password here: :X`;
     }
-    return 'Unknown command';
+    return 'Unknown command - type "help" for a list of available commands.';
   };
 
   const handleEnter = (prompt: string) => {

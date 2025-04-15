@@ -12,3 +12,5 @@ export type StorySegment = {
 export type UserPrompt = Omit<StorySegment, 'id' | 'meta'>;
 
 export type Storyline = StorySegment[];
+
+export type Theme = 'pirate' | 'space' | 'fantasy';

@@ -2,8 +2,8 @@ import { createContext, useContext, useState, ReactNode } from 'react';
 import { Storyline, StorySegment } from '@shared/types/Story';
 
 interface AppContextType {
-  gameTheme: 'PIRATE' | 'SPACE' | 'FANTASY' | null;
-  setGameTheme: (theme: 'PIRATE' | 'SPACE' | 'FANTASY') => void;
+  gameTheme: 'pirate' | 'space' | 'fantasy' | null;
+  setGameTheme: (theme: 'pirate' | 'space' | 'fantasy') => void;
   prompt: string;
   storyline: Storyline;
   setPrompt: (prompt: string) => void;
@@ -19,7 +19,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [prompt, setPrompt] = useState('');
   const [storyline, setStoryline] = useState<Storyline>([]);
   const [isWaiting, setIsWaiting] = useState(false);
-  const [gameTheme, setGameTheme] = useState<'PIRATE' | 'SPACE' | 'FANTASY' | null>(null);
+  const [gameTheme, setGameTheme] = useState<'pirate' | 'space' | 'fantasy' | null>(null);
 
   const addToStoryline = (newSegments: StorySegment[]) => {
     setStoryline((prev) => [...prev, ...newSegments]);
