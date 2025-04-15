@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { userPromptSchema } from '../schema';
 import { RawUserMessage } from '../types';
 import { progressStory } from '../gameEngine';
-import { saveMessage } from '../memory/storage';
+import { addMessage } from '../memory/storage';
 
 export const promptHandler = async (req: Request, res: Response) => {
   const data = req.body;
@@ -22,7 +22,7 @@ export const promptHandler = async (req: Request, res: Response) => {
 
   const assistantMessage = await progressStory(userMessage);
 
-  const augmentedUserMessage = await saveMessage(userMessage);
-  const augmentedAssistantMessage = await saveMessage(assistantMessage);
+  const augmentedUserMessage = await addMessage(userMessage);
+  const augmentedAssistantMessage = await addMessage(assistantMessage);
   res.status(201).json([augmentedUserMessage, augmentedAssistantMessage]);
 };

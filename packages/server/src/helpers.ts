@@ -7,9 +7,13 @@ import { AIMessage } from './types';
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 
-export const stripStorySegmentForLLM = (storySegment: StorySegment): AIMessage => {
-  return {
-    content: storySegment.content ?? '',
-    role: storySegment.role,
+export const toAIMessage = (message: StorySegment): AIMessage => {
+  const content = message.content || '';
+
+  const aiMessage: AIMessage = {
+    role: message.role,
+    content,
   } as AIMessage;
+
+  return aiMessage;
 };

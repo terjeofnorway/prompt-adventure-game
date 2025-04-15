@@ -5,6 +5,7 @@ import { promptHandler } from './handlers/promptHandler';
 import { getStorylineHandler } from './handlers/getStorylineHandler';
 import { getImageHandler } from './handlers/getImageHandler';
 import { summarizeStoryHandler } from './handlers/summarizeStoryHandler';
+import { resetGameHandler } from './handlers/resetGameHandler';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -37,6 +38,10 @@ app.get('/api/summarizeStory', async (req: Request, res: Response) => {
 
 app.get('/api/images/:id', async (req: Request, res: Response) => {
   await getImageHandler(req, res);
+});
+
+app.post('/api/resetGame', async (req: Request, res: Response) => {
+  await resetGameHandler(req, res);
 });
 
 // Start server

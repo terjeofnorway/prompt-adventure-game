@@ -1,0 +1,52 @@
+.promptLine {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  width: 100%;
+  background-color: transparent;
+  color: var(--font-green-prompt);
+  font-size: var(--font-size);
+  font-family: var(--prompt-font);
+}
+
+.promptIndicator {
+  flex-shrink: 0;
+  margin-right: 0.5rem;
+}
+
+.input {
+  background-color: transparent;
+  border: 0;
+  color: var(--font-color);
+  font-size: var(--font-size);
+  font-family: var(--prompt-font);
+  width: 100%;
+  caret-color: transparent;
+}
+
+.input::after {
+  content: '';
+  position: absolute;
+  top: 0.2em;
+  left: 0;
+  width: 1px;
+  height: 1em;
+  background: var(--font-color);
+  animation: blink 1s steps(1) infinite;
+  pointer-events: none;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.input:focus {
+  outline: none;
+}

@@ -7,6 +7,7 @@ body {
 
 :root {
   --font-color: white;
+  --font-green-prompt: #129b12;
   --font-size: 1.2rem;
   --font-family: 'Times New Roman', Times, serif;
   --prompt-font: 'Courier New', Courier, monospace;
@@ -15,4 +16,5 @@ body {
   --light-brown: #c27148;
   --dark-brown: #8e4e2e;
   --prompt-background: #130a08;
+  --black: #111111;
 }
