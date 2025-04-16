@@ -33,11 +33,25 @@ export const useGame = () => {
     }
   };
 
-  const loadGame = async () => {};
+  const loadGame = async () => {
+    const response = await fetch(`${VITE_API_URL}/api/load`);
+    const data = await response.json();
+
+    if (data.storyline) {
+      setStoryline(data.storyline);
+      setGameTheme(data.theme);
+      return true;
+    }
+    return false;
+  };
 
   const startGame = async () => {
+    // Try and load game first if it exists
+    if (await loadGame()) {
+      return;
+    }
     setGameTheme('pirate');
   };
 
-  return { sendPrompt, getStoryline, storyline, isWaiting, gameTheme, loadGame, startGame };
+  return { sendPrompt, getStoryline, storyline, isWaiting, gameTheme, startGame };
 };

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { userPromptSchema } from '../schema';
 import { RawUserMessage } from '../types';
 import { progressStory } from '../gameEngine';
-import { addMessage } from '../memory/storage';
+import { addMessage } from '../storage/storage';
 
 export const promptHandler = async (req: Request, res: Response) => {
   const data = req.body;

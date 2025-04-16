@@ -1,5 +1,6 @@
 .promptLine {
   display: flex;
+  position: relative;
   align-items: center;
   padding: 0.5rem;
   width: 100%;
@@ -10,11 +11,29 @@
 }
 
 .promptIndicator {
+  position: relative;
   flex-shrink: 0;
+  width: fit-content;
   margin-right: 0.5rem;
 }
 
+.caret {
+  display: inline-block;
+  position: absolute;
+  width: 10px;
+  height: 1em;
+  background: var(--font-green-prompt);
+  animation: blink 1s steps(1) infinite;
+}
+
+.mirror {
+  visibility: hidden;
+  white-space: pre;
+  display: inline-block;
+}
+
 .input {
+  position: relative;
   background-color: transparent;
   border: 0;
   color: var(--font-color);
@@ -22,18 +41,6 @@
   font-family: var(--prompt-font);
   width: 100%;
   caret-color: transparent;
-}
-
-.input::after {
-  content: '';
-  position: absolute;
-  top: 0.2em;
-  left: 0;
-  width: 1px;
-  height: 1em;
-  background: var(--font-color);
-  animation: blink 1s steps(1) infinite;
-  pointer-events: none;
 }
 
 @keyframes blink {

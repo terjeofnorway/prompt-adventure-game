@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { saveGameInstructionPrompt, addMessage } from '../memory/storage';
+import { saveGameInstructionPrompt, addMessage } from '../storage/storage';
 import { buildGameInstructionMessage, buildStartMessage, getFullStory, startStory } from '../gameEngine';
 
 export const startStoryHandler = async (_req: Request, res: Response) => {
