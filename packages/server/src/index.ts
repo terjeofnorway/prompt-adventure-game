@@ -6,6 +6,7 @@ import { getStorylineHandler } from './handlers/getStorylineHandler';
 import { getImageHandler } from './handlers/getImageHandler';
 import { summarizeStoryHandler } from './handlers/summarizeStoryHandler';
 import { resetGameHandler } from './handlers/resetGameHandler';
+import { loadGameHandler } from './handlers/loadGameHandler';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -20,8 +21,16 @@ app.get('/api/isAlive', (_req: Request, res: Response) => {
   res.status(200).json({ message: 'Server is alive' });
 });
 
-app.get('/api/start', async (req: Request, res: Response) => {
+app.post('/api/start', async (req: Request, res: Response) => {
   await startStoryHandler(req, res);
+});
+
+app.get('/api/load', async (req: Request, res: Response) => {
+  await loadGameHandler(req, res);
+});
+
+app.post('/api/reset', async (req: Request, res: Response) => {
+  await resetGameHandler(req, res);
 });
 
 app.post('/api/prompt', async (req: Request, res: Response) => {
@@ -38,10 +47,6 @@ app.get('/api/summarizeStory', async (req: Request, res: Response) => {
 
 app.get('/api/images/:id', async (req: Request, res: Response) => {
   await getImageHandler(req, res);
-});
-
-app.post('/api/resetGame', async (req: Request, res: Response) => {
-  await resetGameHandler(req, res);
 });
 
 // Start server

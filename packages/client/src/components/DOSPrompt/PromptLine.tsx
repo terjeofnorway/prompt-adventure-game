@@ -10,12 +10,13 @@ type PromptLineProps = {
 
 export const PromptLine = ({ text, type, onEnter, readonly }: PromptLineProps) => {
   const [prompt, setPrompt] = useState(text);
+  const [hasFocus, setHasFocus] = useState(false);
   const [caretXPos, setCaretXPos] = useState(0);
   const promptIndicator = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const updateCaretPosition = (characterLength: number) => {
     const inputOffsetLeft = promptIndicator.current?.getBoundingClientRect().width || 0;
-    console.log(inputOffsetLeft);
     setCaretXPos(inputOffsetLeft + characterLength * 11.6 + 9);
   };
 
@@ -35,6 +36,9 @@ export const PromptLine = ({ text, type, onEnter, readonly }: PromptLineProps) =
 
   useEffect(() => {
     updateCaretPosition(0);
+    if (!readonly) {
+      inputRef.current?.focus();
+    }
   }, []);
 
   return (
@@ -44,13 +48,16 @@ export const PromptLine = ({ text, type, onEnter, readonly }: PromptLineProps) =
           prompt &gt;
         </div>
       )}
-      {!readonly && <div className={styles.caret} style={{ marginLeft: `${caretXPos}px` }} />}
+      {!readonly && hasFocus && <div className={styles.caret} style={{ marginLeft: `${caretXPos}px` }} />}
       <input
+        ref={inputRef}
         type="text"
         className={styles.input}
         value={prompt}
         onKeyDown={handleKeyDown}
         onChange={handleChange}
+        onFocus={() => setHasFocus(true)}
+        onBlur={() => setHasFocus(false)}
         readOnly={readonly}
       />
     </div>

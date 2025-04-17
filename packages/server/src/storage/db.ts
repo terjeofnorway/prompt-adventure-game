@@ -1,25 +1,16 @@
-import { StorySegment } from '@shared/types/Story';
 import { JSONFilePreset } from 'lowdb/node';
-import { GameTheme } from '../types';
+import { GameState } from '../gameState';
 
-type DatabaseSchema = {
-  gameTheme: GameTheme | null;
-  backgroundId: string | null;
-  storyline: StorySegment[];
-  gameInstructionPrompt: string;
-  summary: string;
-};
-
-const defaultData: DatabaseSchema = {
+const defaultData: GameState = {
   gameTheme: null,
   backgroundId: null,
   storyline: [],
-  gameInstructionPrompt: '',
-  summary: '',
+  summary: null,
+  imageQueue: [],
 };
 
 export const getDB = async () => {
-  const db = await JSONFilePreset<DatabaseSchema>('./packages/server/db.json', defaultData);
+  const db = await JSONFilePreset<GameState>('./packages/server/db.json', defaultData);
 
   return db;
 };

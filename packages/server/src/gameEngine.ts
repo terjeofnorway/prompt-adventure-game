@@ -1,17 +1,15 @@
 import { v4 as uuidv4 } from 'uuid';
 import { gameInstructionPrompt, startPrompt, summaryStartPrompt } from './prompts';
 import { sendMessagesToLLM } from './llm';
-import { getStoryline, getSummary } from './storage/storage';
-import { AIMessage, GameTheme, RawUserMessage } from './types';
+import { AIMessage, RawUserMessage } from './types';
 import { StorySegment } from '@shared/types/Story';
 import { __dirname } from './helpers';
 import { createSituationImage } from './images';
-import { getDB } from './storage/db';
-import { setTheme, addWaitingImages, removeWaitingImages, getTheme } from './gameState';
+import { getGameTheme, getStoryline, getSummary } from './gameState';
 
-export const loadGameState = async () => {
-  const db = await getDB();
-  setTheme(db.data.gameTheme);
+type StoryContent = {
+  story: string;
+  characterDescription: string;
 };
 
 const destructAIMessageResponse = (message: AIMessage): { message: StorySegment; characterDescription: string } => {
@@ -58,7 +56,8 @@ export const buildStartMessage = (): StorySegment => {
 };
 
 export const startStory = async (messages: StorySegment[]): Promise<StorySegment> => {
-  if (getTheme() === null) {
+  const gameTheme = getGameTheme();
+  if (gameTheme === null) {
     throw new Error('Game theme is not set');
   }
   const response = await sendMessagesToLLM({ messages });
@@ -68,14 +67,17 @@ export const startStory = async (messages: StorySegment[]): Promise<StorySegment
     throw new Error('Invalid response from LLM');
   }
 
-  const imageId = characterDescription && createSituationImage(characterDescription, getTheme());
+  const imageId = characterDescription && createSituationImage(characterDescription, gameTheme);
   return { ...message, meta: { imageId, characterDescription } };
 };
 
 export const progressStory = async (rawUserMessage: RawUserMessage): Promise<StorySegment> => {
-  if (getTheme() === null) {
+  const gameTheme = getGameTheme();
+
+  if (gameTheme === null) {
     throw new Error('Game theme is not set');
   }
+
   const storyline = await getStoryline();
   const newMessage: StorySegment = {
     ...rawUserMessage,
@@ -91,7 +93,11 @@ export const progressStory = async (rawUserMessage: RawUserMessage): Promise<Sto
     throw new Error('Invalid response from LLM');
   }
 
-  const imageId = characterDescription && createSituationImage(characterDescription, getTheme());
+  // Note that this is not an async function. We want to deliver
+  // the message to the client as soon as possible, and then
+  // store the image in the background. The client will poll on the image
+  // id and load it when it's ready.
+  const imageId = characterDescription && createSituationImage(characterDescription, gameTheme);
 
   return { ...message, meta: { imageId, characterDescription } };
 };

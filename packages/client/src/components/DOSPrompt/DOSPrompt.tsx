@@ -14,7 +14,7 @@ type SingleDOSPrompt = {
 
 /* A very dirty prompt simulator. Please don't look. */
 export const DOSPrompt = () => {
-  const { startGame } = useGame();
+  const { startGame, loadGame } = useGame();
 
   const [promptHistory, setPromptHistory] = useState<SingleDOSPrompt[]>([]);
 
@@ -23,6 +23,7 @@ export const DOSPrompt = () => {
       const theme = prompt.split(' ').pop()?.replace(/"/g, '') as Theme;
 
       const isThemevalid = availableThemes.includes(theme || '');
+
       if (isThemevalid) {
         setTimeout(startGame, 1000);
       }
@@ -32,8 +33,13 @@ export const DOSPrompt = () => {
         : 'Invalid theme. Please choose from: ' + availableThemes.join(', ') + '.';
     }
 
+    if (prompt.startsWith('game restore')) {
+      setTimeout(loadGame, 1000);
+      return 'Restoring the game...';
+    }
+
     if (prompt.startsWith('help')) {
-      return 'Some available commands: game start "theme", help, exit.';
+      return 'Some available commands: game start "theme", game restore, help, exit.';
     }
 
     if (prompt.startsWith('clear')) {
@@ -53,7 +59,7 @@ export const DOSPrompt = () => {
     if (prompt.startsWith('exit')) {
       return "Exiting. I'm done. Just... I'm out of here.";
     }
-    if (prompt.startsWith('ls')) {
+    if (prompt.startsWith('ls') || prompt.startsWith('dir')) {
       return 'Listing your local files and folders - especially that one folder marked "studies"... ;)';
     }
     if (prompt.startsWith('cd')) {

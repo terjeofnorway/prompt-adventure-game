@@ -1,8 +1,6 @@
 {
-  "gameTheme:": null,
-  "backgroundId": null,
-  "gameInstructionPrompt": "",
-  "storyline": [],
+  "gameTheme": "pirate",
   "summary": "",
-  "gameTheme": "pirate"
+  "backgroundId": null,
+  "storyline": []
 }

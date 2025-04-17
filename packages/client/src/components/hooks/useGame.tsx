@@ -47,11 +47,8 @@ export const useGame = () => {
 
   const startGame = async () => {
     // Try and load game first if it exists
-    if (await loadGame()) {
-      return;
-    }
     setGameTheme('pirate');
   };
 
-  return { sendPrompt, getStoryline, storyline, isWaiting, gameTheme, startGame };
+  return { sendPrompt, getStoryline, storyline, isWaiting, gameTheme, startGame, loadGame };
 };

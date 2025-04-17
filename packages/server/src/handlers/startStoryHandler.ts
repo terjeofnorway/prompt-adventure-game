@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { saveGameInstructionPrompt, addMessage } from '../storage/storage';
+import { addMessage } from '../storage/storage';
 import { buildGameInstructionMessage, buildStartMessage, getFullStory, startStory } from '../gameEngine';
 
 export const startStoryHandler = async (_req: Request, res: Response) => {
@@ -8,7 +8,6 @@ export const startStoryHandler = async (_req: Request, res: Response) => {
 
   const assistantResponse = await startStory([gameInstructionMessage, startMessage]);
 
-  await saveGameInstructionPrompt(gameInstructionMessage);
   await addMessage(startMessage);
   await addMessage(assistantResponse);
 

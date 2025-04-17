@@ -7,8 +7,7 @@ import { buildImageStylePrompt } from './prompts';
 import { generateImage } from './llm';
 import { logger } from './logger';
 import { __dirname } from './helpers';
-
-import { gameState } from './gameEngine';
+import { removeImageFromQueue } from './gameState';
 import { GameTheme, ImageSize } from './types';
 
 type HandleImageResponseFromLLM = {
@@ -36,7 +35,7 @@ export const handleImageResponseFromLLM = ({ response, uuid }: HandleImageRespon
     imageResponse.data.pipe(writer);
     writer.on('finish', () => {
       logger.info(`Image saved to ${imageStoragePath}`);
-      gameState.waitingImages = gameState.waitingImages.filter((id) => id !== uuid);
+      removeImageFromQueue(uuid);
     });
   });
 };
@@ -47,13 +46,13 @@ export const handleImageResponseFromLLM = ({ response, uuid }: HandleImageRespon
  * if the image is ready.
  */
 const createAndStoreImage = ({ imagePrompt, uuid, size }: { imagePrompt: string; uuid: string; size: ImageSize }) => {
-  gameState.waitingImages.push(uuid);
+  removeImageFromQueue(uuid);
   logger.info(`Creating image for ${uuid} with prompt: ${imagePrompt}`);
   generateImage({ imagePrompt, size })
     .then((response) => handleImageResponseFromLLM({ response, uuid }))
     .catch((error) => {
       logger.error(`Error creating image for ${uuid}: ${error}`);
-      gameState.waitingImages = gameState.waitingImages.filter((id) => id !== uuid);
+      removeImageFromQueue(uuid);
     });
 };
 

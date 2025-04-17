@@ -1,10 +1,8 @@
 import { Request, Response } from 'express';
 import { __dirname } from '../helpers';
-import { loadGameState } from '../gameEngine';
-import { resetGame } from '../storage/storage';
+import { loadGameState, resetGame } from '../gameState';
 import { GameTheme } from '../types';
 import { createBackgroundImage } from '../images';
-import { gameState } from '../gameEngine';
 
 const availableGameThemes = ['pirate', 'space', 'fantasy'];
 
@@ -20,11 +18,9 @@ export const resetGameHandler = async (req: Request, res: Response) => {
   const backgroundId = createBackgroundImage(gameTheme);
 
   await resetGame(gameTheme, backgroundId);
-  await loadGameState();
+  const gameState = await loadGameState();
 
   res.status(200).json({
-    message: 'Game reset successfully',
-    gameTheme: gameState.gameTheme,
-    backgroundId,
+    ...gameState,
   });
 };
