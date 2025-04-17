@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import { startStoryHandler } from './handlers/startStoryHandler';
+import { startGameHandler } from './handlers/startGameHandler';
 import { promptHandler } from './handlers/promptHandler';
 import { getStorylineHandler } from './handlers/getStorylineHandler';
 import { getImageHandler } from './handlers/getImageHandler';
@@ -22,7 +22,7 @@ app.get('/api/isAlive', (_req: Request, res: Response) => {
 });
 
 app.post('/api/start', async (req: Request, res: Response) => {
-  await startStoryHandler(req, res);
+  await startGameHandler(req, res);
 });
 
 app.get('/api/load', async (req: Request, res: Response) => {

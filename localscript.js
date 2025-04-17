@@ -1,5 +1,6 @@
 import { createServer } from 'vite';
 import { spawn } from 'child_process';
+import path from 'path';
 
 async function startDev() {
   // Start Vite server locally

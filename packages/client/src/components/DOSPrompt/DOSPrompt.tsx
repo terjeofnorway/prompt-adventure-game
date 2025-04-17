@@ -3,7 +3,7 @@ import styles from './DOSPrompt.module.css';
 import { PromptLine } from './PromptLine';
 import { v4 as uuidv4 } from 'uuid';
 import { useGame } from '../hooks/useGame';
-import { availableThemes } from '@shared/themes';
+import { availableGameThemes } from '@shared/themes';
 import { Theme } from '@shared/types/Story';
 
 type SingleDOSPrompt = {
@@ -22,7 +22,7 @@ export const DOSPrompt = () => {
     if (prompt.startsWith('game start')) {
       const theme = prompt.split(' ').pop()?.replace(/"/g, '') as Theme;
 
-      const isThemevalid = availableThemes.includes(theme || '');
+      const isThemevalid = availableGameThemes.includes(theme || '');
 
       if (isThemevalid) {
         setTimeout(startGame, 1000);
@@ -30,7 +30,7 @@ export const DOSPrompt = () => {
 
       return isThemevalid
         ? `Starting the game with ${theme} theme.`
-        : 'Invalid theme. Please choose from: ' + availableThemes.join(', ') + '.';
+        : 'Invalid theme. Please choose from: ' + availableGameThemes.join(', ') + '.';
     }
 
     if (prompt.startsWith('game restore')) {

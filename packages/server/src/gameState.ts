@@ -58,6 +58,7 @@ export const resetGame = async (gameTheme: GameTheme, backgroundId: string) => {
   gameState.summary = null;
 
   saveGameState(false);
+  return gameState;
 };
 
 export const setGameTheme = (theme: GameTheme) => {
