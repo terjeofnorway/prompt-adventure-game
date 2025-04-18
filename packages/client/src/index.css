@@ -4,13 +4,17 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
+@font-face {
+  font-family: 'PressStart2P';
+  src: url('assets/PressStart2P-Regular.ttf') format('truetype');
+  font-display: swap;
+}
 
 :root {
   --font-color: white;
   --font-green-prompt: #129b12;
   --font-size: 1.2rem;
-  --font-family: 'Times New Roman', Times, serif;
-  --prompt-font: 'Courier New', Courier, monospace;
+  --default-font: 'PressStart2P', sans-serif;
 
   --brown: #af6540;
   --light-brown: #c27148;

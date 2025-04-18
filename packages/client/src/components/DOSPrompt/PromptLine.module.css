@@ -3,57 +3,17 @@
   position: relative;
   align-items: center;
   padding: 0.5rem;
+  line-height: 2rem;
   width: 100%;
   background-color: transparent;
   color: var(--font-green-prompt);
   font-size: var(--font-size);
-  font-family: var(--prompt-font);
+  font-family: var(--default-font);
 }
-
-.promptIndicator {
-  position: relative;
-  flex-shrink: 0;
-  width: fit-content;
-  margin-right: 0.5rem;
-}
-
-.caret {
-  display: inline-block;
-  position: absolute;
-  width: 10px;
-  height: 1em;
-  background: var(--font-green-prompt);
-  animation: blink 1s steps(1) infinite;
-}
-
-.mirror {
-  visibility: hidden;
-  white-space: pre;
-  display: inline-block;
-}
-
-.input {
-  position: relative;
-  background-color: transparent;
-  border: 0;
+.user {
   color: var(--font-color);
-  font-size: var(--font-size);
-  font-family: var(--prompt-font);
-  width: 100%;
-  caret-color: transparent;
 }
 
-@keyframes blink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  50.01%,
-  100% {
-    opacity: 0;
-  }
-}
-
-.input:focus {
-  outline: none;
+.system {
+  color: var(--font-green-prompt);
 }

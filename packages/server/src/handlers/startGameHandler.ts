@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { GameTheme } from '../types';
+import { GameTheme } from '@shared/types/GameState';
 import { createBackgroundImage } from '../images';
 import { getGameTheme, loadGameState, resetGame } from '../gameState';
 

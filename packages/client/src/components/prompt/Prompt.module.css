@@ -16,7 +16,7 @@
   height: fill-content;
   width: 100%;
   color: var(--font-color);
-  font-family: var(--prompt-font);
+  font-family: var(--default-font);
   font-size: var(--font-size);
 }
 
@@ -28,6 +28,6 @@
   width: 100%;
   background-color: #9a4d34;
   color: var(--font-color);
-  font-family: var(--font-family);
+  font-family: var(--default-font);
   font-size: var(--font-size);
 }

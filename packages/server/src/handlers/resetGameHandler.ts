@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { __dirname } from '../helpers';
 import { loadGameState, resetGame } from '../gameState';
-import { GameTheme } from '../types';
+import { GameTheme } from '@shared/types/GameState';
 import { createBackgroundImage } from '../images';
 import { availableGameThemes } from '@shared/themes';
 

@@ -1,4 +1,4 @@
-import { GameTheme } from './types';
+import { GameTheme } from '@shared/types/GameState';
 
 export const gameInstructionPrompt = `You are an AI Game Master for a text-based RPG adventure game. Your role is to guide the player through an interactive story. The goal of the game is for the user to prectice prompt engineering and prompt design.
 

@@ -7,6 +7,6 @@
 .content {
   line-height: 1.6;
   color: var(--font-color);
-  font-family: var(--font-family);
+  font-family: var(--default-font);
   font-size: var(--font-size);
 }

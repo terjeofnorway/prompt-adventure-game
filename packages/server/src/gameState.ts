@@ -1,16 +1,8 @@
-import { GameTheme } from './types';
+import { GameTheme } from '@shared/types/GameState';
 import { StorySegment } from '@shared/types/Story';
 import { __dirname } from './helpers';
 import { getDB } from './storage/db';
 import { logger } from './logger';
-
-export type GameState = {
-  backgroundId: string | null;
-  summary: string | null;
-  gameTheme: GameTheme | null;
-  storyline: StorySegment[];
-  imageQueue: string[];
-};
 
 const gameState: GameState = {
   imageQueue: [],

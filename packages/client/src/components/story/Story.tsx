@@ -1,7 +1,7 @@
 import styles from './Story.module.css';
 import { useAppContext } from '../../context/AppContext';
 import { StorySegment } from './StorySegment';
-import { Loader } from './Loader';
+import { Loader } from '../loader/Loader';
 import { useEffect, useRef } from 'react';
 import { useGame } from '../hooks/useGame';
 import { useStoryScroll } from '../hooks/useStoryScroll';

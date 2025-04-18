@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useGame } from '../hooks/useGame';
 import { availableGameThemes } from '@shared/themes';
 import { Theme } from '@shared/types/Story';
+import { PromptInput } from './PromptInput';
 
 type SingleDOSPrompt = {
   type: 'user' | 'computer';
@@ -89,9 +90,9 @@ export const DOSPrompt = () => {
   return (
     <div className={styles.DOSPrompt}>
       {promptHistory.map((prompt) => (
-        <PromptLine key={prompt.id} text={prompt.text} type={prompt.type} onEnter={handleEnter} readonly />
+        <PromptLine key={prompt.id} text={prompt.text} type={prompt.type} />
       ))}
-      <PromptLine text={''} type="user" onEnter={handleEnter} />
+      <PromptInput onEnter={handleEnter} />
     </div>
   );
 };

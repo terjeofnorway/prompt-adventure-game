@@ -1,40 +1,56 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { Storyline, StorySegment } from '@shared/types/Story';
+import { GameState } from '@shared/types/GameState';
+import { availableGameThemes, defaultGameState } from '@shared/helpers/gameState';
 
 interface AppContextType {
-  gameTheme: 'pirate' | 'space' | 'fantasy' | null;
+  setFullGameState: (newGameState: GameState) => void;
+  gameState: GameState;
   setGameTheme: (theme: 'pirate' | 'space' | 'fantasy') => void;
-  prompt: string;
-  storyline: Storyline;
-  setPrompt: (prompt: string) => void;
-  setStoryline: (storyline: Storyline) => void;
   addToStoryline: (message: StorySegment[]) => void;
   isWaiting: boolean;
+  setBackgroundId: (backgroundId: string) => void;
   setIsWaiting: (loading: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [prompt, setPrompt] = useState('');
-  const [storyline, setStoryline] = useState<Storyline>([]);
+  const [gameState, setGameState] = useState<GameState>(defaultGameState);
   const [isWaiting, setIsWaiting] = useState(false);
-  const [gameTheme, setGameTheme] = useState<'pirate' | 'space' | 'fantasy' | null>(null);
+
+  const setFullGameState = (newGameState: GameState) => {
+    setGameState({
+      ...newGameState,
+    });
+  };
 
   const addToStoryline = (newSegments: StorySegment[]) => {
-    setStoryline((prev) => [...prev, ...newSegments]);
+    setGameState((prev) => ({
+      ...prev,
+      storyline: [...prev.storyline, ...newSegments],
+    }));
+  };
+
+  const setGameTheme = (theme: 'pirate' | 'space' | 'fantasy') => {
+    if (!availableGameThemes.includes(theme)) {
+      throw new Error(`Invalid game theme: ${theme}`);
+    }
+    setGameState((prev) => ({ ...prev, gameTheme: theme }));
+  };
+
+  const setBackgroundId = (backgroundId: string) => {
+    setGameState((prev) => ({ ...prev, backgroundId }));
   };
 
   return (
     <AppContext.Provider
       value={{
-        gameTheme,
-        prompt,
-        setPrompt,
-        storyline,
-        setStoryline,
-        setGameTheme,
+        setFullGameState,
+        gameState,
         addToStoryline,
+        setBackgroundId,
+        setGameTheme,
         isWaiting,
         setIsWaiting,
       }}

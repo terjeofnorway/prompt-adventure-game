@@ -10,6 +10,4 @@ export type AIMessage =
   | OpenAI.Chat.Completions.ChatCompletionUserMessageParam
   | OpenAI.Chat.Completions.ChatCompletionDeveloperMessageParam;
 
-export type GameTheme = 'pirate' | 'space' | 'fantasy';
-
 export type ImageSize = 'small' | 'medium' | 'large' | 'xlarge';

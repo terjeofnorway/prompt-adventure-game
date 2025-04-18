@@ -1,0 +1,41 @@
+.loader {
+  display: flex;
+  padding: 0 1rem;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  animation: rotate 6s steps(18) infinite;
+}
+
+.icon {
+  flex: 1;
+  display: block;
+}
+
+.icon path {
+  fill: var(--font-color);
+}
+
+.text {
+  display: flex;
+  font-size: 1.5rem;
+  color: var(--font-color);
+  padding-top: 4px;
+  font-family: var(--default-font);
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

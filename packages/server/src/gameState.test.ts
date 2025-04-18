@@ -14,10 +14,9 @@ import {
   getSummary,
   setSummmary,
   loadGameState,
-  GameState,
 } from './gameState';
 import { getDB } from './storage/db';
-import { GameTheme } from './types';
+import { GameState, GameTheme } from '@shared/types/GameState';
 import { StorySegment } from '@shared/types/Story';
 
 // Mock dependencies
