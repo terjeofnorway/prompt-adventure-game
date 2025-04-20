@@ -12,7 +12,6 @@ const saveGameStateToDB = async (initialWait: boolean) => {
   }
 
   if (!initialWait) {
-    logger.info('Saving game state...');
     const db = await getDB();
     db.data = gameState;
     await db.write();

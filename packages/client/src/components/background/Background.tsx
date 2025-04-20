@@ -1,6 +1,5 @@
 import { useGame } from '../hooks/useGame';
 import { useImageWithPolling } from '../hooks/useImageWithPolling';
-import { Loader } from '../loader/Loader';
 import styles from './Background.module.css';
 
 export const Background = () => {
@@ -21,7 +20,6 @@ export const Background = () => {
 
   return (
     <div className={`${styles.background} ${imageSrc && !loading ? styles.fadeIn : ''}`} style={backgroundStyle}>
-      {loading && <Loader className={styles.loader} text="Loading..." />}
       {error && <div className={styles.error}>Error loading image</div>}
     </div>
   );

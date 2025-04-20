@@ -6,7 +6,6 @@ import { useGame } from '../hooks/useGame';
 import { availableGameThemes } from '@shared/helpers/gameState';
 import { Theme } from '@shared/types/Story';
 import { PromptInput } from './PromptInput';
-import { isValid } from 'zod';
 import { isValidGameTheme } from '@shared/helpers/typeValidators';
 
 type SingleDOSPrompt = {
@@ -17,7 +16,7 @@ type SingleDOSPrompt = {
 
 /* A very dirty prompt simulator. Please don't look. */
 export const DOSPrompt = () => {
-  const { startGame, loadGame, restartGame } = useGame();
+  const { startGame, loadGame } = useGame();
 
   const [promptHistory, setPromptHistory] = useState<SingleDOSPrompt[]>([]);
 
@@ -51,7 +50,7 @@ export const DOSPrompt = () => {
       const theme = prompt.split(' ').pop()?.replace(/"/g, '') as Theme;
 
       if (isValidGameTheme(theme)) {
-        restartGame(theme);
+        startGame(theme, true);
       }
 
       return isValidGameTheme(theme)

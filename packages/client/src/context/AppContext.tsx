@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { StorySegment } from '@shared/types/Story';
-import { GameState, GameTheme } from '@shared/types/GameState';
+import { GameState, GameTheme, LoadingState } from '@shared/types/GameState';
 import { isValidGameState, isValidGameTheme } from '@shared/helpers/typeValidators';
 
 type AppContextType = {
@@ -8,16 +8,16 @@ type AppContextType = {
   gameState: GameState | null;
   setGameTheme: (theme: GameTheme) => void;
   addToStoryline: (message: StorySegment[]) => void;
-  isWaiting: boolean;
+  loadingState: LoadingState;
   setBackgroundId: (backgroundId: string) => void;
-  setIsWaiting: (loading: boolean) => void;
+  setLoadingState: (loadingState: LoadingState) => void;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [gameState, setGameState] = useState<GameState | null>(null);
-  const [isWaiting, setIsWaiting] = useState(false);
+  const [loadingState, setLoadingState] = useState<LoadingState>(null);
 
   const setFullGameState = (newGameState: GameState) => {
     if (!isValidGameState(newGameState)) {
@@ -61,11 +61,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       value={{
         setFullGameState,
         gameState,
-        isWaiting,
+        loadingState,
+        setLoadingState,
         addToStoryline,
         setBackgroundId,
         setGameTheme,
-        setIsWaiting,
       }}
     >
       {children}

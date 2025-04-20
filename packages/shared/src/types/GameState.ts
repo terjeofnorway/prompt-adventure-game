@@ -9,3 +9,5 @@ export type GameState = {
   storyline: StorySegment[];
   imageQueue: string[];
 };
+
+export type LoadingState = 'loading_game' | 'loading_prompt' | null;

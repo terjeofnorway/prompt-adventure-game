@@ -1,23 +1,23 @@
-import styles from './App.module.css';
-import { Header } from './components/Header';
-import { Board } from './components/board/Board';
 import { useGame } from './components/hooks/useGame';
-import { Illustration } from './components/illustration/Illustration';
 import { DOSPrompt } from './components/DOSPrompt/DOSPrompt';
-import { Background } from './components/background/Background';
+import { Game } from './Game';
+import { Loader } from './components/loader/Loader';
+
+import styles from './App.module.css';
+import { useLoader } from './components/hooks/useLoader';
 
 function App() {
-  const { gameState } = useGame();
+  const { gameState, loadingState } = useGame();
+  const { isGameReady } = useLoader();
 
-  console.log('App.tsx', gameState);
+  const isGameLoading = loadingState === 'loading_game';
+  const isLobby = !isGameLoading && gameState === null;
 
   return (
     <div className={styles.container}>
-      {gameState !== null && <Background />}
-      {gameState && <Header />}
-      {gameState && <Board />}
-      {gameState && <Illustration />}
-      {!gameState && <DOSPrompt />}
+      {isGameLoading && <Loader className={styles.loader} text="Loading..." />}
+      {isGameReady && <Game />}
+      {isLobby && <DOSPrompt />}
     </div>
   );
 }
