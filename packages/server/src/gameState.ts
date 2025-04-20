@@ -46,16 +46,20 @@ export const loadGameStateFromDB = async () => {
   return loadedGameState;
 };
 
-export const resetGame = async (gameTheme: GameTheme, backgroundId: string) => {
+export const getGameState = () => {
+  return gameState;
+};
+
+export const newGame = async (gameTheme: GameTheme, backgroundId: string) => {
   gameState = {
-    imageQueue: [],
+    imageQueue: [backgroundId],
     gameTheme: gameTheme,
     backgroundId: backgroundId,
     storyline: [],
     summary: '',
   };
 
-  saveGameStateToDB(false);
+  saveGameStateToDB(true);
   return gameState;
 };
 

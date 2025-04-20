@@ -20,7 +20,7 @@ export const Background = () => {
       : {};
 
   return (
-    <div className={styles.background} style={backgroundStyle}>
+    <div className={`${styles.background} ${imageSrc && !loading ? styles.fadeIn : ''}`} style={backgroundStyle}>
       {loading && <Loader className={styles.loader} text="Loading..." />}
       {error && <div className={styles.error}>Error loading image</div>}
     </div>

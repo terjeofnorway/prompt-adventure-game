@@ -21,7 +21,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const setFullGameState = (newGameState: GameState) => {
     if (!isValidGameState(newGameState)) {
-      throw new Error('Invalid game state');
+      throw new Error(`Invalid game state: ${JSON.stringify(newGameState)}`);
     }
     setGameState({
       ...newGameState,

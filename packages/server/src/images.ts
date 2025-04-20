@@ -7,8 +7,9 @@ import { buildImageStylePrompt } from './prompts';
 import { generateImage } from './llm';
 import { logger } from './logger';
 import { __dirname } from './helpers';
-import { removeImageFromQueue } from './gameState';
-import { GameTheme, ImageSize } from './types';
+import { addImageToQueue, removeImageFromQueue } from './gameState';
+import { ImageSize } from './types';
+import { GameTheme } from '@shared/types/GameState';
 
 type HandleImageResponseFromLLM = {
   response: ImagesResponse;
@@ -46,7 +47,6 @@ export const handleImageResponseFromLLM = ({ response, uuid }: HandleImageRespon
  * if the image is ready.
  */
 const createAndStoreImage = ({ imagePrompt, uuid, size }: { imagePrompt: string; uuid: string; size: ImageSize }) => {
-  removeImageFromQueue(uuid);
   logger.info(`Creating image for ${uuid} with prompt: ${imagePrompt}`);
   generateImage({ imagePrompt, size })
     .then((response) => handleImageResponseFromLLM({ response, uuid }))

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
-  resetGame,
+  newGame,
   setGameTheme,
   getGameTheme,
   isImageInQueue,
@@ -152,7 +152,7 @@ describe('Game State Management', () => {
       // Reset game
       const newTheme: GameTheme = 'pirate';
       const newBgId = '2';
-      await resetGame(newTheme, newBgId);
+      await newGame(newTheme, newBgId);
 
       // Verify state reset
       expect(getGameTheme()).toEqual(newTheme);

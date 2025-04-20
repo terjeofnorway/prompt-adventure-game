@@ -1,6 +1,7 @@
 import { StorySegment } from '@shared/types/Story';
 import { useAppContext } from '../../context/AppContext';
 import { GameState, GameTheme } from '@shared/types/GameState';
+import { isValidGameState } from '@shared/helpers/typeValidators';
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
@@ -37,10 +38,11 @@ export const useGame = () => {
   };
 
   const loadGame = async () => {
-    const gameState = await getGameState();
+    const response = await fetch(`${VITE_API_URL}/api/load`);
+    const gameState = (await response.json()) as GameState;
 
-    if (!gameState.gameTheme) {
-      return false;
+    if (!isValidGameState(gameState)) {
+      return null;
     }
     setFullGameState(gameState);
     return gameState;
@@ -60,5 +62,19 @@ export const useGame = () => {
     return gameState;
   };
 
-  return { sendPrompt, isWaiting, gameState, startGame, loadGame, setGameTheme, getGameState };
+  const restartGame = async (gameTheme: GameTheme) => {
+    const response = await fetch(`${VITE_API_URL}/api/restart`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ gameTheme }),
+    });
+
+    const gameState = (await response.json()) as GameState;
+    setFullGameState(gameState);
+    return gameState;
+  };
+
+  return { sendPrompt, isWaiting, gameState, startGame, loadGame, restartGame, setGameTheme, getGameState };
 };

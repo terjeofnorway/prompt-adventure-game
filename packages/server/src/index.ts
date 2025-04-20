@@ -5,7 +5,7 @@ import { promptHandler } from './handlers/promptHandler';
 import { getGameStateHandler } from './handlers/getGameStateHandler';
 import { getImageHandler } from './handlers/getImageHandler';
 import { summarizeStoryHandler } from './handlers/summarizeStoryHandler';
-import { resetGameHandler } from './handlers/resetGameHandler';
+import { restartGameHandler } from './handlers/restartGameHandler';
 import { loadGameHandler } from './handlers/loadGameHandler';
 
 const app = express();
@@ -29,8 +29,8 @@ app.get('/api/load', async (req: Request, res: Response) => {
   await loadGameHandler(req, res);
 });
 
-app.post('/api/reset', async (req: Request, res: Response) => {
-  await resetGameHandler(req, res);
+app.post('/api/restart', async (req: Request, res: Response) => {
+  await restartGameHandler(req, res);
 });
 
 app.post('/api/prompt', async (req: Request, res: Response) => {
