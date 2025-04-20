@@ -28,3 +28,6 @@ dist-ssr
 
 # Database
 **/db.json
+
+# Created images
+/packages/server/assets/
