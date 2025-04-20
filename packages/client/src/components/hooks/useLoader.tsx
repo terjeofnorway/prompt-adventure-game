@@ -16,7 +16,6 @@ export const useLoader = (): UseLoader => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/images/${backgroundId}`, {
       method: 'HEAD',
     });
-    console.log(response);
     return response.status === 200;
   };
 

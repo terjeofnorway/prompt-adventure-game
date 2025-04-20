@@ -4,7 +4,7 @@ import { sendMessagesToLLM } from './llm';
 import { AIMessage, RawUserMessage } from './types';
 import { StorySegment } from '@shared/types/Story';
 import { createSituationImage } from './images';
-import { getGameTheme, getStoryline, getSummary } from './gameState';
+import { getGameTheme, getStoryline, getSummary, loadGameStateFromDB } from './gameState';
 
 type StoryContent = {
   story: string;
@@ -139,3 +139,5 @@ export const getFullStory = async () => {
   const storyline = await getStoryline();
   return storyline;
 };
+
+loadGameStateFromDB();

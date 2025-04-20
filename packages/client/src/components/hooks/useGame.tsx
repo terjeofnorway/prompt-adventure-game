@@ -18,6 +18,8 @@ export const useGame = () => {
       body: JSON.stringify({ content: prompt }),
     });
 
+    console.log('Response:', response);
+
     const data = (await response.json()) as StorySegment[];
 
     if (response.ok) {
@@ -35,6 +37,23 @@ export const useGame = () => {
       setFullGameState(gameState);
     }
     return gameState;
+  };
+
+  const startConversation = async () => {
+    setLoadingState('loading_prompt');
+    const response = await fetch(`${VITE_API_URL}/api/startConversation`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = (await response.json()) as StorySegment[];
+
+    if (response.ok) {
+      addToStoryline(data);
+      setLoadingState(null);
+    }
   };
 
   const loadGame = async () => {

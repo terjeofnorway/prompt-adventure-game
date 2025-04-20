@@ -1,16 +1,15 @@
 import styles from './Prompt.module.css';
-import { useAppContext } from '../../context/AppContext';
 import { useGame } from '../hooks/useGame';
+import { useState } from 'react';
 
 export const Prompt = () => {
-  const { prompt, setPrompt } = useAppContext();
+  const [prompt, setPrompt] = useState<string>('');
   const { sendPrompt } = useGame();
 
   const handleSubmit = async () => {
     window.dispatchEvent(new Event('USER_PROMPT'));
     sendPrompt(prompt);
     setPrompt('');
-    
   };
 
   return (
