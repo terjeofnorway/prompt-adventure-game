@@ -1,5 +1,5 @@
-import { Storyline, StorySegment } from '@shared/types/Story';
-import { AIMessage, GameTheme } from '../types';
+import { StorySegment } from '@shared/types/Story';
+import { AIMessage } from '../types';
 import { getDB } from './db';
 import { v4 as uuidv4 } from 'uuid';
 

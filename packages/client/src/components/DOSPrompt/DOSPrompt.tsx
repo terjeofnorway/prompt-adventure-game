@@ -3,7 +3,7 @@ import styles from './DOSPrompt.module.css';
 import { PromptLine } from './PromptLine';
 import { v4 as uuidv4 } from 'uuid';
 import { useGame } from '../hooks/useGame';
-import { availableGameThemes } from '@shared/themes';
+import { availableGameThemes } from '@shared/helpers/gameState';
 import { Theme } from '@shared/types/Story';
 import { PromptInput } from './PromptInput';
 
@@ -86,7 +86,6 @@ export const DOSPrompt = () => {
     }, 600);
   };
 
-  console.log(promptHistory);
   return (
     <div className={styles.DOSPrompt}>
       {promptHistory.map((prompt) => (

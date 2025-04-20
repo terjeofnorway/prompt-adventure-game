@@ -1,5 +1,5 @@
+import { GameState } from '@shared/types/GameState';
 import { JSONFilePreset } from 'lowdb/node';
-import { GameState } from '../gameState';
 
 const defaultData: GameState = {
   gameTheme: null,

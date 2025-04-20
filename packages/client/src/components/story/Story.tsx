@@ -5,10 +5,17 @@ import { Loader } from '../loader/Loader';
 import { useEffect, useRef } from 'react';
 import { useGame } from '../hooks/useGame';
 import { useStoryScroll } from '../hooks/useStoryScroll';
+import { isValidGameState } from '@shared/helpers/typeValidators';
 
 export const Story = () => {
-  const { storyline } = useAppContext();
+  const { gameState } = useAppContext();
+
+  if (!isValidGameState(gameState)) {
+    throw new Error('Invalid game state');
+  }
+
   const { isWaiting } = useGame();
+  const { storyline } = gameState;
 
   const scrollRef = useRef<HTMLDivElement>(null);
 

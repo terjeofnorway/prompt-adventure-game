@@ -6,8 +6,9 @@ import { useEffect, useState } from 'react';
 
 export const Illustration = () => {
   const [imageId, setImageId] = useState<string | null>(null);
-  const setNewImageId = (e: any) => {
-    const imageId = e.detail.id;
+  const setNewImageId = (e: Event) => {
+    const customEvent = e as CustomEvent<{ id: string }>;
+    const imageId = customEvent.detail.id;
     setImageId(imageId);
   };
   useEffect(() => {

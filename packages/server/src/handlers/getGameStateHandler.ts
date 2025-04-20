@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { loadGameStateFromDB } from '../gameState';
 
-export const loadGameHandler = async (_req: Request, res: Response) => {
-  const gameState = await loadGameStateFromDB();
+export const getGameStateHandler = async (_req: Request, res: Response) => {
+  const gameState = loadGameStateFromDB();
 
   if (!gameState) {
     return res.status(200).json({});

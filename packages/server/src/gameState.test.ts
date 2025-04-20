@@ -13,7 +13,7 @@ import {
   setBackgroundId,
   getSummary,
   setSummmary,
-  loadGameState,
+  loadGameStateFromDB,
 } from './gameState';
 import { getDB } from './storage/db';
 import { GameState, GameTheme } from '@shared/types/GameState';
@@ -181,7 +181,7 @@ describe('Game State Management', () => {
       (getDB as ReturnType<typeof vi.fn>).mockResolvedValue(mockDB);
 
       // Load state
-      await loadGameState();
+      await loadGameStateFromDB();
 
       // Verify state loaded correctly
       expect(getGameTheme()).toEqual(savedState.gameTheme);

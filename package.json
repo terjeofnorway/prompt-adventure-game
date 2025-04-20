@@ -5,30 +5,34 @@
   "type": "module",
   "scripts": {
     "dev": "node localscript.js",
+    "lint": "npx eslint",
     "test": "vitest"
   },
   "workspaces": [
     "packages/*"
   ],
   "devDependencies": {
-    "@eslint/js": "^9.19.0",
+    "@eslint/js": "^9.25.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
     "@types/node": "^22.13.4",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
+    "@typescript-eslint/parser": "^8.30.1",
     "@vitejs/plugin-react": "^4.3.4",
-    "eslint": "^9.19.0",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.18",
-    "globals": "^15.14.0",
+    "globals": "^15.15.0",
     "tsx": "^4.19.3",
     "typescript": "~5.7.2",
-    "typescript-eslint": "^8.22.0",
+    "typescript-eslint": "^8.30.1",
     "vite": "^6.1.0"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "zod": "^3.24.3"
   }
 }

@@ -2,25 +2,20 @@ import styles from './App.module.css';
 import { Header } from './components/Header';
 import { Board } from './components/board/Board';
 import { useGame } from './components/hooks/useGame';
-import { useEffect } from 'react';
 import { Illustration } from './components/illustration/Illustration';
 import { DOSPrompt } from './components/DOSPrompt/DOSPrompt';
 import { Background } from './components/background/Background';
 
 function App() {
-  const { getStoryline, gameTheme } = useGame();
-
-  useEffect(() => {
-    getStoryline();
-  }, []);
+  const { gameState } = useGame();
 
   return (
     <div className={styles.container}>
-      {gameTheme && <Header />}
-      {gameTheme && <Board />}
-      {gameTheme && <Illustration />}
-      {!gameTheme && <DOSPrompt />}
-      <Background />
+      {gameState && <Header />}
+      {gameState && <Board />}
+      {gameState && <Illustration />}
+      {!gameState && <DOSPrompt />}
+      {gameState !== null && <Background />}
     </div>
   );
 }

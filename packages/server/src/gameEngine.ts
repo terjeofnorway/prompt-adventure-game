@@ -3,7 +3,6 @@ import { gameInstructionPrompt, startPrompt, summaryStartPrompt } from './prompt
 import { sendMessagesToLLM } from './llm';
 import { AIMessage, RawUserMessage } from './types';
 import { StorySegment } from '@shared/types/Story';
-import { __dirname } from './helpers';
 import { createSituationImage } from './images';
 import { getGameTheme, getStoryline, getSummary } from './gameState';
 

@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
-import { __dirname } from '../helpers';
-import { loadGameState, resetGame } from '../gameState';
+import { loadGameStateFromDB, resetGame } from '../gameState';
 import { GameTheme } from '@shared/types/GameState';
 import { createBackgroundImage } from '../images';
-import { availableGameThemes } from '@shared/themes';
+import { availableGameThemes } from '@shared/helpers/gameState';
 
 export const resetGameHandler = async (req: Request, res: Response) => {
   // First define the GameTheme type if it doesn't exist already
@@ -16,7 +15,7 @@ export const resetGameHandler = async (req: Request, res: Response) => {
   const backgroundId = createBackgroundImage(gameTheme);
 
   await resetGame(gameTheme, backgroundId);
-  const gameState = await loadGameState();
+  const gameState = await loadGameStateFromDB();
 
   res.status(200).json({
     ...gameState,

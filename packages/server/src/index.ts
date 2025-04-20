@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { startGameHandler } from './handlers/startGameHandler';
 import { promptHandler } from './handlers/promptHandler';
-import { getStorylineHandler } from './handlers/getStorylineHandler';
+import { getGameStateHandler } from './handlers/getGameStateHandler';
 import { getImageHandler } from './handlers/getImageHandler';
 import { summarizeStoryHandler } from './handlers/summarizeStoryHandler';
 import { resetGameHandler } from './handlers/resetGameHandler';
@@ -37,8 +37,8 @@ app.post('/api/prompt', async (req: Request, res: Response) => {
   await promptHandler(req, res);
 });
 
-app.get('/api/storyline', async (req: Request, res: Response) => {
-  await getStorylineHandler(req, res);
+app.get('/api/gameState', async (req: Request, res: Response) => {
+  await getGameStateHandler(req, res);
 });
 
 app.get('/api/summarizeStory', async (req: Request, res: Response) => {

@@ -11,9 +11,9 @@ export const PromptInput = ({ onEnter }: PromptInputProps) => {
   const [caretXPos, setCaretXPos] = useState(0);
   const promptIndicator = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const inputOffsetLeft = promptIndicator.current?.getBoundingClientRect().width || 0;
 
   const updateCaretPosition = (characterLength: number) => {
-    const inputOffsetLeft = promptIndicator.current?.getBoundingClientRect().width || 0;
     setCaretXPos(inputOffsetLeft + characterLength * 19.2 + 11);
   };
 
@@ -34,7 +34,7 @@ export const PromptInput = ({ onEnter }: PromptInputProps) => {
   useEffect(() => {
     updateCaretPosition(0);
     inputRef.current?.focus();
-  }, []);
+  }, [inputOffsetLeft]);
 
   return (
     <div className={styles.promptInput}>

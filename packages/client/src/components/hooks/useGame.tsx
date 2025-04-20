@@ -1,10 +1,11 @@
 import { StorySegment } from '@shared/types/Story';
 import { useAppContext } from '../../context/AppContext';
+import { GameState, GameTheme } from '@shared/types/GameState';
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 export const useGame = () => {
-  const { gameTheme, setGameTheme, storyline, setStoryline, addToStoryline, isWaiting, setIsWaiting } = useAppContext();
+  const { gameState, setGameTheme, addToStoryline, isWaiting, setIsWaiting, setFullGameState } = useAppContext();
 
   const sendPrompt = async (prompt: string) => {
     setIsWaiting(true);
@@ -24,31 +25,40 @@ export const useGame = () => {
     }
   };
 
-  const getStoryline = async () => {
-    const response = await fetch(`${VITE_API_URL}/api/storyline`);
+  const getGameState = async () => {
+    const response = await fetch(`${VITE_API_URL}/api/gameState`);
     const data = await response.json();
+    const gameState = data.gameState as GameState;
 
-    if (data.storyline) {
-      setStoryline(data.storyline);
+    if (gameState.gameTheme) {
+      setFullGameState(gameState);
     }
+    return gameState;
   };
 
   const loadGame = async () => {
-    const response = await fetch(`${VITE_API_URL}/api/load`);
-    const data = await response.json();
+    const gameState = await getGameState();
 
-    if (data.storyline) {
-      setStoryline(data.storyline);
-      setGameTheme(data.theme);
-      return true;
+    if (!gameState.gameTheme) {
+      return false;
     }
-    return false;
+    setFullGameState(gameState);
+    return gameState;
   };
 
-  const startGame = async () => {
-    // Try and load game first if it exists
-    setGameTheme('pirate');
+  const startGame = async (gameTheme: GameTheme) => {
+    const response = await fetch(`${VITE_API_URL}/api/start`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ gameTheme }),
+    });
+    const data = await response.json();
+    const gameState = data.gameState as GameState;
+    setFullGameState(gameState);
+    return gameState;
   };
 
-  return { sendPrompt, getStoryline, storyline, isWaiting, gameTheme, startGame, loadGame };
+  return { sendPrompt, isWaiting, gameState, startGame, loadGame, setGameTheme, getGameState };
 };

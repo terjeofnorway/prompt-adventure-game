@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { toAIMessage, __dirname, __filename } from './helpers';
+import { toAIMessage, __dirname } from './helpers';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { StorySegment } from '@shared/types/Story';
@@ -22,7 +22,7 @@ describe('helpers', () => {
     });
 
     it('should use empty string for content if it is null or undefined', () => {
-      // @ts-expect-error
+      // @ts-expect-error Expected to test null content
       const storySegment: StorySegment = {
         id: '1',
         content: null,

@@ -1,46 +1,59 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { Storyline, StorySegment } from '@shared/types/Story';
-import { GameState } from '@shared/types/GameState';
-import { availableGameThemes, defaultGameState } from '@shared/helpers/gameState';
+import { StorySegment } from '@shared/types/Story';
+import { GameState, GameTheme } from '@shared/types/GameState';
+import { isValidGameState, isValidGameTheme } from '@shared/helpers/typeValidators';
 
-interface AppContextType {
-  setFullGameState: (newGameState: GameState) => void;
-  gameState: GameState;
-  setGameTheme: (theme: 'pirate' | 'space' | 'fantasy') => void;
+type AppContextType = {
+  setFullGameState: (gameState: GameState) => void;
+  gameState: GameState | null;
+  setGameTheme: (theme: GameTheme) => void;
   addToStoryline: (message: StorySegment[]) => void;
   isWaiting: boolean;
   setBackgroundId: (backgroundId: string) => void;
   setIsWaiting: (loading: boolean) => void;
-}
+};
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [gameState, setGameState] = useState<GameState>(defaultGameState);
+  const [gameState, setGameState] = useState<GameState | null>(null);
   const [isWaiting, setIsWaiting] = useState(false);
 
   const setFullGameState = (newGameState: GameState) => {
+    if (!isValidGameState(newGameState)) {
+      throw new Error('Invalid game state');
+    }
     setGameState({
       ...newGameState,
     });
   };
 
   const addToStoryline = (newSegments: StorySegment[]) => {
-    setGameState((prev) => ({
-      ...prev,
-      storyline: [...prev.storyline, ...newSegments],
-    }));
+    if (gameState === null) {
+      throw new Error('Game state is not initialized');
+    }
+
+    setGameState({
+      ...gameState,
+      storyline: [...gameState.storyline, ...newSegments],
+    });
   };
 
   const setGameTheme = (theme: 'pirate' | 'space' | 'fantasy') => {
-    if (!availableGameThemes.includes(theme)) {
+    if (gameState === null) {
+      throw new Error('Game state is not initialized');
+    }
+    if (!isValidGameTheme(theme)) {
       throw new Error(`Invalid game theme: ${theme}`);
     }
-    setGameState((prev) => ({ ...prev, gameTheme: theme }));
+    setGameState({ ...gameState, gameTheme: theme });
   };
 
   const setBackgroundId = (backgroundId: string) => {
-    setGameState((prev) => ({ ...prev, backgroundId }));
+    if (!gameState) {
+      throw new Error('Game state is not initialized');
+    }
+    setGameState({ ...gameState, backgroundId });
   };
 
   return (
@@ -48,10 +61,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       value={{
         setFullGameState,
         gameState,
+        isWaiting,
         addToStoryline,
         setBackgroundId,
         setGameTheme,
-        isWaiting,
         setIsWaiting,
       }}
     >
