@@ -1,3 +1,5 @@
+<img src="gamelogo.png" alt="Code Adventure Game Logo" width="200px" />
+
 # Code Adventure Game
 
 A nostalgic text-based adventure game powered by AI, reminiscent of the classic 90's RPG text games.
