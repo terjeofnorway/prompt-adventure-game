@@ -1,12 +1,12 @@
-<img src="gamelogo.png" alt="Code Adventure Game Logo" width="200px" />
+<img src="gamelogo.png" alt="Prompt Adventure Game Logo" width="200px" />
 
-# Code Adventure Game
+# Prompt Adventure Game
 
 A nostalgic text-based adventure game powered by AI, reminiscent of the classic 90's RPG text games.
 
 ## About
 
-Code Adventure Game is an AI-powered interactive storytelling experience that allows players to:
+Prompt Adventure Game is an AI-powered interactive storytelling experience that allows players to:
 
 - Embark on unique text-based adventures that respond to your choices
 - Choose from three immersive themes: pirate, space, and fantasy
