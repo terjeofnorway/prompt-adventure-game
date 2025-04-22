@@ -91,7 +91,7 @@ This game uses the OpenAI API which incurs usage costs. You will need to:
 
 ### Privacy
 
-This game will run locally on your computer and does not send any information or data to any outside servers or services.
+This here game’ll be sailin’ on yer own device, aye. All yer scurvy prompts be sent t’ OpenAI, so take heed – don’t be sharin’ any personal treasure nor secrets that might cross OpenAI’s code o’ conduct or get ye in hot water with the law. That means no foul or unlawful commands, or anythin’ that might get ye keelhauled by the authorities!
 
 ### OpenAI API Usage Details
 
