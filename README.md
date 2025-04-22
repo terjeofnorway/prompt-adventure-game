@@ -81,7 +81,7 @@ The project is structured as a monorepo with:
 - OpenAI API integration for story and image generation
 - Shared types and utilities
 
-## Important Note
+## Important notes
 
 This game uses the OpenAI API which incurs usage costs. You will need to:
 
@@ -108,10 +108,6 @@ This game will run locally on your computer and does not send any information or
 - Set up a spending limit in the [OpenAI usage limits panel](https://platform.openai.com/account/billing/limits)
 - Regenerate or revoke your API key if you suspect it has been compromised
 - Never share your API key or commit it to public repositories
-
-## License
-
-[Add your license information here]
 
 ## Acknowledgments
 
