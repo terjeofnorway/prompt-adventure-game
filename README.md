@@ -1,6 +1,10 @@
-<img src="gamelogo.png" alt="Prompt Adventure Game Logo" width="200px" />
+<p align="center">
+  <img src="gamelogo.png" alt="Prompt Adventure Game Logo" width="200px" />
+</p>
 
 # Prompt Adventure Game
+
+<img src="screenshot1.png" alt="Screenshot from the game, showing a dialogue and an illustration of a grumpy pirate." width="100%" />
 
 A nostalgic text-based adventure game powered by AI, reminiscent of the classic 90's RPG text games.
 
