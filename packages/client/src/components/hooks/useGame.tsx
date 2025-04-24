@@ -78,8 +78,7 @@ export const useGame = () => {
       },
       body: JSON.stringify({ gameTheme }),
     });
-    const data = await response.json();
-    const gameState = data.gameState as GameState;
+    const gameState = (await response.json()) as GameState;
     setFullGameState(gameState);
     return gameState;
   };

@@ -7,7 +7,7 @@
   width: 100%;
   background-color: transparent;
   color: var(--font-green-prompt);
-  font-size: var(--font-size);
+  font-size: var(--font-size-large);
   font-family: var(--default-font);
 }
 .user {

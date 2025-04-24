@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: row;
   font-family: var(--default-font);
-  font-size: var(--font-size);
+  font-size: var(--font-size-large);
   padding: 0.5rem;
   position: relative;
   width: 100%;
@@ -15,7 +15,7 @@
   color: var(--font-green-prompt);
   flex-shrink: 0;
   font-family: var(--default-font);
-  font-size: var(--font-size);
+  font-size: var(--font-size-large);
   margin-right: 0.5rem;
   position: relative;
   width: fit-content;
@@ -36,7 +36,7 @@
   caret-color: transparent;
   color: var(--font-color);
   font-family: var(--default-font);
-  font-size: var(--font-size);
+  font-size: var(--font-size-large);
   position: relative;
   width: 100%;
 }

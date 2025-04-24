@@ -7,9 +7,10 @@ import { buildImageStylePrompt } from './prompts';
 import { generateImage } from './llm';
 import { logger } from './logger';
 import { __dirname } from './helpers';
-import { addImageToQueue, removeImageFromQueue } from './gameState';
+import { removeImageFromQueue } from './gameState';
 import { ImageSize } from './types';
 import { GameTheme } from '@shared/types/GameState';
+import { isValidGameTheme } from '@shared/helpers/typeValidators';
 
 type HandleImageResponseFromLLM = {
   response: ImagesResponse;
@@ -72,18 +73,17 @@ export const createSituationImage = (description: string, gameTheme: GameTheme) 
 /* Create a background image to set the games overall theme.
  */
 export const createBackgroundImage = (gameTheme: GameTheme) => {
-  const descriptions: Record<GameTheme, string> = {
-    pirate:
-      'A lively pirate harbor with ships, treasure maps, and pirates drinking grog. The scene is bustling with activity, with pirates trading goods and planning their next adventure. The sky is bright blue with fluffy clouds, and the sea is a deep turquoise.',
-    space:
-      'A futuristic spaceship flying through a galaxy filled with stars and planets. The ship is sleek and metallic, with glowing lights. The background is a colorful nebula with swirling gases and distant stars.',
-    fantasy:
-      'A medieval castle surrounded by enchanted forests and mythical creatures. The sky is blue with fluffy clouds. A small brook flows in the foreground with a small stone bridge crossing it.',
-  };
-
-  if (!descriptions[gameTheme]) {
+  if (!isValidGameTheme(gameTheme)) {
     throw new Error(`Invalid game theme: ${gameTheme}`);
   }
+  const descriptions: Record<GameTheme, string> = {
+    pirate:
+      'The setting is a moonlit pirate bay with wooden docks, glowing lanterns, and a stormy sky. In the foreground, a heroic pirate captain stands tall with a billowing coat, holding a cutlass high, as ghostly ships rise from the mist behind him. Lightning illuminates the scene, casting eerie shadows and revealing a hidden treasure chest glinting in the sand. 256-color palette with dithering, slightly pixelated look, exaggerated character proportions, and cinematic composition like a retro movie poster.',
+    space:
+      'A lone space hero stands on an alien cliffside under a vast galactic sky, gazing at a massive star cruiser engaged in a space battle above. Laser blasts streak across the stars, while distant planets and a glowing nebula paint the sky. The hero wears a retro space suit, one arm raised with a plasma tool, framed by the eerie glow of alien crystals. The image should resemble a classic sci-fi movie poster.',
+    fantasy:
+      'A young wizard stands atop a cliff at dawn, staff raised as magical energy swirls around them. Below lies a misty enchanted forest with glowing runes and a distant castle hovering in the air. Dragons soar in the sky, and a spellbook levitates beside the hero. The art style should use 256-color dithering, exaggerated proportions, and a rich, detailed pixel look with mystical lighting—like a classic fantasy movie poster in pixel form.',
+  };
 
   const imagePrompt = buildImageStylePrompt({
     gameTheme,
