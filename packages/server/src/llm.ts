@@ -1,4 +1,4 @@
-import { AIMessage, ImageSize } from './types';
+import { AIMessage, ImageContext } from './types';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
 import { zodResponseFormat } from 'openai/helpers/zod';
@@ -7,7 +7,7 @@ import { buildGameInstructionMessage } from './gameEngine';
 import { llmResponseSchema } from './schema';
 import { StorySegment } from '@shared/types/Story';
 import { logger } from './logger';
-import { toAIMessage } from './helpers';
+import { isStorySegment, toAIMessage } from './helpers';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -27,20 +27,26 @@ export const connectToLLM = async () => {
  * Prepares a message thread for the LLM by adding initial developer instruction prompt and converting
  * story segments to the AI message format
  */
-export const prepareLLMMessageThread = async (messages: StorySegment[]): Promise<AIMessage[]> => {
+export const prepareLLMMessageThread = async (messages: StorySegment[] | AIMessage[]): Promise<AIMessage[]> => {
   const gameInstructionPrompt = await buildGameInstructionMessage();
-  return [gameInstructionPrompt, ...messages].map(toAIMessage).filter((item): item is AIMessage => !!item);
+
+  const aiMessages = messages.map((message) => {
+    // Convert StorySegment to AIMessage if needed, otherwise use as is
+    return isStorySegment(message) ? toAIMessage(message) : message;
+  });
+
+  return [gameInstructionPrompt, ...aiMessages].filter((item): item is AIMessage => !!item);
 };
 
 /**
  * Sends a conversation thread to the LLM and retrieves a response
  */
-export const sendMessagesToLLM = async ({ messages }: { messages: StorySegment[] }) => {
+export const sendMessagesToLLM = async ({ messages }: { messages: StorySegment[] | AIMessage[] }) => {
   const openai = await connectToLLM();
 
   const llmMessageThread = await prepareLLMMessageThread(messages);
 
-  logger.info(`Sending LLM message request`);
+  logger.info(`LLM message thread: ${JSON.stringify(llmMessageThread, null, 2)}`);
   const response = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: llmMessageThread,
@@ -51,23 +57,18 @@ export const sendMessagesToLLM = async ({ messages }: { messages: StorySegment[]
     throw new Error('No choices in LLM response');
   }
 
+  console.log(response.choices[0].message);
+
   return response.choices[0].message;
 };
 
 /**
  * Generates an image based on a character description using DALL-E
  */
-export const generateImage = async ({ imagePrompt, size }: { imagePrompt: string; size: ImageSize }) => {
+export const generateImage = async ({ imagePrompt, context }: { imagePrompt: string; context: ImageContext }) => {
   const openai = await connectToLLM();
 
-  const sizeDictionary = {
-    small: '256x256',
-    medium: '512x512',
-    large: '1024x1024',
-    xlarge: '1792x1024',
-  };
-
-  const imageSize = sizeDictionary[size] as OpenAI.ImageGenerateParams['size'];
+  const imageSize = context === 'situation' ? '1024x1024' : '1792x1024';
 
   const response = await openai.images.generate({
     model: 'dall-e-3',

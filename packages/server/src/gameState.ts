@@ -3,6 +3,7 @@ import { StorySegment } from '@shared/types/Story';
 import { getDB } from './storage/db';
 import { logger } from './logger';
 import { isValidGameState } from '@shared/helpers/typeValidators';
+import { startStory } from './gameEngine';
 
 let gameState: GameState | null = null;
 
@@ -58,7 +59,9 @@ export const newGame = async (gameTheme: GameTheme, backgroundId: string) => {
     summary: '',
   };
 
-  saveGameStateToDB(true);
+  const newSegment = await startStory();
+  gameState.storyline.push(newSegment);
+  await saveGameStateToDB(true);
   return gameState;
 };
 

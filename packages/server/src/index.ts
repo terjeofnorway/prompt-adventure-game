@@ -7,6 +7,7 @@ import { getImageHandler } from './handlers/getImageHandler';
 import { summarizeStoryHandler } from './handlers/summarizeStoryHandler';
 import { restartGameHandler } from './handlers/restartGameHandler';
 import { loadGameHandler } from './handlers/loadGameHandler';
+import { eventSubscribeHandler } from './handlers/eventSubscribeHandler';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -16,6 +17,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.raw({ type: 'application/json' }));
 app.use(express.json());
+
+app.get('/api/subscribe/:id', (req: Request, res: Response) => eventSubscribeHandler(req, res));
 
 app.get('/api/isAlive', (_req: Request, res: Response) => {
   res.status(200).json({ message: 'Server is alive' });

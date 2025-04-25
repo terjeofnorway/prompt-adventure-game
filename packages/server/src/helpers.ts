@@ -17,3 +17,18 @@ export const toAIMessage = (message: StorySegment): AIMessage => {
 
   return aiMessage;
 };
+
+/**
+ * Type guard to check if a message is a StorySegment or an AIMessage
+ * StorySegment has an 'id' property and optionally a 'meta' property
+ */
+export const isStorySegment = (message: StorySegment | AIMessage): message is StorySegment => {
+  return 'id' in message;
+};
+
+/**
+ * Type guard to check if a message is an AIMessage (not a StorySegment)
+ */
+export const isAIMessage = (message: StorySegment | AIMessage): message is AIMessage => {
+  return !('id' in message);
+};

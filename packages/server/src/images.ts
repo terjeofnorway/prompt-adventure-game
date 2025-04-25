@@ -8,7 +8,7 @@ import { generateImage } from './llm';
 import { logger } from './logger';
 import { __dirname } from './helpers';
 import { removeImageFromQueue } from './gameState';
-import { ImageSize } from './types';
+import { ImageContext } from './types';
 import { GameTheme } from '@shared/types/GameState';
 import { isValidGameTheme } from '@shared/helpers/typeValidators';
 
@@ -47,9 +47,17 @@ export const handleImageResponseFromLLM = ({ response, uuid }: HandleImageRespon
  * just send the uuid to the client. The client will then poll the server to check
  * if the image is ready.
  */
-const createAndStoreImage = ({ imagePrompt, uuid, size }: { imagePrompt: string; uuid: string; size: ImageSize }) => {
+const createAndStoreImage = ({
+  imagePrompt,
+  uuid,
+  context,
+}: {
+  imagePrompt: string;
+  uuid: string;
+  context: ImageContext;
+}) => {
   logger.info(`Creating image for ${uuid} with prompt: ${imagePrompt}`);
-  generateImage({ imagePrompt, size })
+  generateImage({ imagePrompt, context })
     .then((response) => handleImageResponseFromLLM({ response, uuid }))
     .catch((error) => {
       logger.error(`Error creating image for ${uuid}: ${error}`);
@@ -66,7 +74,8 @@ export const createSituationImage = (description: string, gameTheme: GameTheme) 
   });
 
   const uuid = uuidv4();
-  createAndStoreImage({ imagePrompt, uuid, size: 'medium' });
+  logger.info(`Creating situation image for ${uuid} with prompt: ${imagePrompt}`);
+  createAndStoreImage({ imagePrompt, uuid, context: 'situation' });
   return uuid;
 };
 
@@ -91,6 +100,6 @@ export const createBackgroundImage = (gameTheme: GameTheme) => {
   });
 
   const uuid = uuidv4();
-  createAndStoreImage({ imagePrompt, uuid, size: 'xlarge' });
+  createAndStoreImage({ imagePrompt, uuid, context: 'background' });
   return uuid;
 };

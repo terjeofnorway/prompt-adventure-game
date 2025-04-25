@@ -54,11 +54,18 @@ export const buildStartMessage = (): StorySegment => {
   };
 };
 
-export const startStory = async (messages: StorySegment[]): Promise<StorySegment> => {
+export const startStory = async (): Promise<StorySegment> => {
   const gameTheme = getGameTheme();
   if (gameTheme === null) {
     throw new Error('Game theme is not set');
   }
+  const messages: AIMessage[] = [
+    {
+      role: 'developer',
+      content:
+        'Please start the story now. It should start off with a welcome and a short introduction of the RPG character.',
+    },
+  ];
   const response = await sendMessagesToLLM({ messages });
   const { message, characterDescription } = destructAIMessageResponse(response);
 

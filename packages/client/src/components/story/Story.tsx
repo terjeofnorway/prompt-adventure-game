@@ -3,18 +3,16 @@ import { useAppContext } from '../../context/AppContext';
 import { StorySegment } from './StorySegment';
 import { Loader } from '../loader/Loader';
 import { useEffect, useRef } from 'react';
-import { useGame } from '../hooks/useGame';
 import { useStoryScroll } from '../hooks/useStoryScroll';
 import { isValidGameState } from '@shared/helpers/typeValidators';
 
 export const Story = () => {
-  const { gameState } = useAppContext();
+  const { gameState, loadingState } = useAppContext();
 
   if (!isValidGameState(gameState)) {
     throw new Error('Invalid game state');
   }
 
-  const { isWaiting } = useGame();
   const { storyline } = gameState;
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -23,8 +21,10 @@ export const Story = () => {
 
   // Scroll to bottom when storyline changes or when waiting state changes
   useEffect(() => {
-    scrollToBottom();
-  }, [storyline, isWaiting]);
+    if (loadingState === null) {
+      scrollToBottom();
+    }
+  }, [storyline, loadingState]);
 
   const handleUserPrompt = () => {
     scrollToBottom();
@@ -46,7 +46,7 @@ export const Story = () => {
         {storyline.map((storySegment) => (
           <StorySegment key={storySegment.id} storySegment={storySegment} />
         ))}
-        {isWaiting && <Loader />}
+        {loadingState === 'loading_prompt' && <Loader />}
       </div>
     </div>
   );
