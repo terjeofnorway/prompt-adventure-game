@@ -90,7 +90,7 @@ describe('LLM Functions', () => {
         content: 'Test message',
         id: '123',
         meta: {
-          characterDescription: 'Test character description',
+          situationDescription: 'Test scene description',
           imageId: '456',
           isSummarized: false,
         },
@@ -131,9 +131,9 @@ describe('LLM Functions', () => {
 
   describe('postImagePromptToLLM', () => {
     it('should generate an image based on a character description', async () => {
-      const characterDescription = 'A brave knight with a sword';
+      const situationDescription = 'A brave knight with a sword';
       const openaiInstance = await connectToLLM();
-      const result = await generateImage(characterDescription);
+      const result = await generateImage({ imagePrompt: situationDescription, context: 'situation' });
 
       expect(openaiInstance.images.generate).toHaveBeenCalled();
 

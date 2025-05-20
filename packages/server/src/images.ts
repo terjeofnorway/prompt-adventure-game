@@ -79,6 +79,22 @@ export const createSituationImage = (description: string, gameTheme: GameTheme) 
   return uuid;
 };
 
+/* Create a character portrait image based on the character description.
+ */
+export const createCharacterImage = (characterDescription: string, gameTheme: GameTheme) => {
+  const portraitPrompt = `Portrait of a character: ${characterDescription}`;
+
+  const imagePrompt = buildImageStylePrompt({
+    gameTheme,
+    description: portraitPrompt,
+  });
+
+  const uuid = uuidv4();
+  logger.info(`Creating character portrait for ${uuid} with prompt: ${imagePrompt}`);
+  createAndStoreImage({ imagePrompt, uuid, context: 'situation' });
+  return uuid;
+};
+
 /* Create a background image to set the games overall theme.
  */
 export const createBackgroundImage = (gameTheme: GameTheme) => {

@@ -4,7 +4,7 @@ export type StorySegment = {
   id: string;
   meta?: {
     imageId?: string;
-    characterDescription?: string;
+    situationDescription?: string;
     isSummarized?: boolean;
   };
 } & AIMessage;

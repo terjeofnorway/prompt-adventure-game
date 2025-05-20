@@ -4,10 +4,12 @@ import dotenv from 'dotenv';
 import { zodResponseFormat } from 'openai/helpers/zod';
 
 import { buildGameInstructionMessage } from './gameEngine';
-import { llmResponseSchema } from './schema';
+import { characterCreationSchema, llmResponseSchema } from './schema';
 import { StorySegment } from '@shared/types/Story';
 import { logger } from './logger';
 import { isStorySegment, toAIMessage } from './helpers';
+import { getThemePrompt } from './prompts';
+import { GameTheme } from '@shared/types/GameState';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -59,6 +61,43 @@ export const sendMessagesToLLM = async ({ messages }: { messages: StorySegment[]
 
   console.log(response.choices[0].message);
 
+  return response.choices[0].message;
+};
+
+/**
+ * Creates a character for the game with detailed attributes using the LLM
+ * This is used at the beginning of the game to establish the player character
+ */
+export const createCharacter = async ({ gameTheme }: { gameTheme: GameTheme }) => {
+  const openai = await connectToLLM();
+
+  const themeDescription = getThemePrompt(gameTheme);
+
+  const characterPrompt: AIMessage[] = [
+    {
+      role: 'developer',
+      content: `You are a character creation assistant for an adventure game. ${themeDescription} Create a detailed protagonist character appropriate for the game theme provided.`,
+    },
+    {
+      role: 'user',
+      content: `Create a character for a ${gameTheme}-themed adventure game. 
+      The character should be interesting and have unique characteristics that fit the theme. 
+      Provide a detailed visual description that could be used to generate an image of the character.`,
+    },
+  ];
+
+  logger.info(`Creating character for ${gameTheme} theme`);
+  const response = await openai.chat.completions.create({
+    model: 'gpt-4o-mini',
+    messages: characterPrompt,
+    response_format: zodResponseFormat(characterCreationSchema, 'characterCreation'),
+  });
+
+  if (!response.choices || response.choices.length === 0) {
+    throw new Error('No choices in LLM character creation response');
+  }
+
+  logger.info(`Character created: ${JSON.stringify(response.choices[0].message.content, null, 2)}`);
   return response.choices[0].message;
 };
 
