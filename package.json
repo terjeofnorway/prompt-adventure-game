@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node localscript.js",
+    "dev": "concurrently \"node localscript.js\" \"npm run dev:client\"",
+    "dev:client": "npm run dev --workspace=packages/playground",
     "lint": "npx eslint",
     "test": "vitest"
   },
@@ -20,6 +21,7 @@
     "@types/react-dom": "^19.0.3",
     "@typescript-eslint/parser": "^8.30.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.2",
     "eslint": "^9.25.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.0.0",
