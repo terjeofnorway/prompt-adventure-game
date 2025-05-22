@@ -21,7 +21,7 @@ Subtly encourage iteration through in-character hints or world feedback. Never b
 
 Use other characters only when a developer prompt allows it. Otherwise, center the story on the player’s actions and decisions.
 
-Maintain the spirit of classic adventure games: witty dialogue, playful sarcasm, light absurdity.`;
+The theme of the game is pirate adventure. Keep to a Caribbean setting in the 1700s. Maintain the spirit of classic adventure games: witty dialogue, playful sarcasm, light absurdity.`;
 
 const imageStyleTemplate =
   'Create an image in the style of classic pixel-art 80’s and early 90’s adventure games like Monkey Island, King’s Quest, and Space Quest. Use a 256-color palette, dithering effects, and a slightly pixelated look.';
