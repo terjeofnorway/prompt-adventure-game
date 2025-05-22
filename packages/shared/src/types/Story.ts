@@ -1,4 +1,4 @@
-import { AIMessage } from '../../../server/src/types';
+import { OpenAIMessage } from '../../../server/src/types';
 
 export type StorySegment = {
   id: string;
@@ -7,7 +7,7 @@ export type StorySegment = {
     situationDescription?: string;
     isSummarized?: boolean;
   };
-} & AIMessage;
+} & OpenAIMessage;
 
 export type UserPrompt = Omit<StorySegment, 'id' | 'meta'>;
 

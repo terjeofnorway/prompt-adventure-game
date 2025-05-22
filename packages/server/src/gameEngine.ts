@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { gameInstructionPrompt, startPrompt, summaryStartPrompt } from './prompts';
 import { createCharacter, sendMessagesToLLM } from './llm';
-import { AIMessage, RawUserMessage } from './types';
+import { OpenAIMessage, RawUserMessage } from './types';
 import { StorySegment } from '@shared/types/Story';
 import { createCharacterImage, createSituationImage } from './images';
 import { addImageToQueue, getGameTheme, getStoryline, getSummary, loadGameStateFromDB } from './gameState';
@@ -12,7 +12,7 @@ type StoryContent = {
   situationDescription: string;
 };
 
-const destructAIMessageResponse = (message: AIMessage): { message: StorySegment; situationDescription: string } => {
+const destructAIMessageResponse = (message: OpenAIMessage): { message: StorySegment; situationDescription: string } => {
   if (typeof message.content !== 'string') {
     throw new Error('Invalid message content');
   }
@@ -36,7 +36,7 @@ export const buildGameInstructionMessage = async () => {
   } as StorySegment;
 };
 
-export const buildSummaryInstructionMessage = async (currentSummary: string): Promise<AIMessage> => {
+export const buildSummaryInstructionMessage = async (currentSummary: string): Promise<OpenAIMessage> => {
   const summaryPrompt = currentSummary
     ? `${summaryStartPrompt}. The following has already happened and should be included in the summary: ${currentSummary}`
     : `${summaryStartPrompt}`;
@@ -94,7 +94,7 @@ export const startStory = async (): Promise<StorySegment> => {
 
   const character = await generateGameCharacter();
   console.log('Character generated:', character);
-  const messages: AIMessage[] = [
+  const messages: OpenAIMessage[] = [
     {
       role: 'developer',
       content:

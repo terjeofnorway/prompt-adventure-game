@@ -1,4 +1,4 @@
-import { AIMessage, ImageContext } from './types';
+import { OpenAIMessage, ImageContext } from './types';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
 import { zodResponseFormat } from 'openai/helpers/zod';
@@ -29,7 +29,7 @@ export const connectToLLM = async () => {
  * Prepares a message thread for the LLM by adding initial developer instruction prompt and converting
  * story segments to the AI message format
  */
-export const prepareLLMMessageThread = async (messages: StorySegment[] | AIMessage[]): Promise<AIMessage[]> => {
+export const prepareLLMMessageThread = async (messages: StorySegment[] | OpenAIMessage[]): Promise<OpenAIMessage[]> => {
   const gameInstructionPrompt = await buildGameInstructionMessage();
 
   const aiMessages = messages.map((message) => {
@@ -37,13 +37,13 @@ export const prepareLLMMessageThread = async (messages: StorySegment[] | AIMessa
     return isStorySegment(message) ? toAIMessage(message) : message;
   });
 
-  return [gameInstructionPrompt, ...aiMessages].filter((item): item is AIMessage => !!item);
+  return [gameInstructionPrompt, ...aiMessages].filter((item): item is OpenAIMessage => !!item);
 };
 
 /**
  * Sends a conversation thread to the LLM and retrieves a response
  */
-export const sendMessagesToLLM = async ({ messages }: { messages: StorySegment[] | AIMessage[] }) => {
+export const sendMessagesToLLM = async ({ messages }: { messages: StorySegment[] | OpenAIMessage[] }) => {
   const openai = await connectToLLM();
 
   const llmMessageThread = await prepareLLMMessageThread(messages);
@@ -73,14 +73,14 @@ export const createCharacter = async ({ gameTheme }: { gameTheme: GameTheme }) =
 
   const themeDescription = getThemePrompt(gameTheme);
 
-  const characterPrompt: AIMessage[] = [
+  const characterPrompt: OpenAIMessage[] = [
     {
       role: 'developer',
       content: `You are a character creation assistant for an adventure game. ${themeDescription} Create a detailed protagonist character appropriate for the game theme provided.`,
     },
     {
       role: 'user',
-      content: `Create a character for a ${gameTheme}-themed adventure game. 
+      content: `Create a character for a ${gameTheme}-themed adventure game
       The character should be interesting and have unique characteristics that fit the theme. 
       Provide a detailed visual description that could be used to generate an image of the character.`,
     },

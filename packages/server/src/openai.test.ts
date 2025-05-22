@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { connectToLLM, sendMessagesToLLM, generateImage } from './llm';
 import { StorySegment } from '@shared/types/Story';
 import { buildGameInstructionMessage } from './gameEngine';
-import { AIMessage } from './types';
+import { OpenAIMessage } from './types';
 import { toAIMessage } from './helpers';
 
 // foo.test.ts
@@ -96,7 +96,7 @@ describe('LLM Functions', () => {
         },
       };
 
-      const expected: AIMessage = {
+      const expected: OpenAIMessage = {
         role: 'user',
         content: 'Test message',
       };
